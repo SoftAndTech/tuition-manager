@@ -3,7 +3,7 @@
 > Working name: **Tuition Manager** (final Play Store name TBD)
 > Owner: Soft And Tech Solutions
 > Platform: Android (Kotlin + Jetpack Compose)
-> Status: **Planning — awaiting approval before coding starts**
+> Status: **Phase 0 ✅ · Phase 1 ✅ · next: Phase 2 (Students & batches screens)**
 
 ---
 
@@ -65,19 +65,34 @@ split into modules only if it grows.
 
 ## 5. Data Model (v1)
 
+*Implemented in Phase 1.* All money is stored as whole **paise** (Long) — never floating point.
+
 | Table | Key fields |
 |---|---|
-| `Batch` | id, name, subject, days (bitmask), startTime, endTime, defaultMonthlyFee, active |
-| `Student` | id, name, phone, parentName, parentPhone, className/school, joinDate, photoUri?, notes, active |
-| `Enrollment` | id, studentId, batchId, feeOverride?, joinedOn, leftOn? |
-| `FeePlan` | id, enrollmentId, type (MONTHLY / ONE_TIME / PER_CLASS), amount, dueDay |
-| `FeeDue` | id, studentId, period (yyyy-MM), amount, dueDate, status (DUE / PARTIAL / PAID / WAIVED) |
-| `Payment` | id, studentId, feeDueId?, amount, mode (CASH / UPI / BANK / OTHER), paidOn, receiptNo, note |
-| `Attendance` | id, batchId, studentId, date, status (PRESENT / ABSENT / LEAVE) |
-| `Expense` *(Pro)* | id, category, amount, date, note |
-| `Settings` (DataStore) | tutor name, institute name, logo, UPI ID, currency, receipt prefix, lock options |
+| `batches` | id, name, subject, daysMask (bit 0 = Mon), startMinute, endMinute, monthlyFeePaise, feeDueDay (1–31, clamped to month length), active |
+| `students` | id, name, phone, parentName, parentPhone, className, joinDate, notes, active |
+| `enrollments` | id, studentId, batchId, feeOverridePaise?, joinedOn, leftOn?, billFrom (first month to bill) |
+| `fee_dues` | id, studentId, enrollmentId?, period (yyyy-MM)?, title, amountPaise, dueDate, waived — unique (enrollmentId, period) |
+| `payments` | id, studentId, amountPaise, mode (CASH / UPI / BANK / OTHER), paidOn, receiptSeq (unique), note |
+| `payment_allocations` | id, paymentId, feeDueId, amountPaise — how each payment was split across dues |
+| `attendance` | id, batchId, studentId, date, status (PRESENT / ABSENT / LEAVE) — unique (batch, student, date) |
+| `expenses` *(Pro)* | id, category, amountPaise, date, note |
+| `Settings` (DataStore, Phase 3+) | tutor name, institute name, logo, UPI ID, receipt prefix, join-month policy, lock options |
 
-Monthly `FeeDue` rows are generated automatically (WorkManager on the 1st + on app open).
+**Changes from the original draft:**
+- `FeePlan` was folded into `enrollments` (fee override) + `batches` (fee, due day). One-time charges
+  (admission, books) are `fee_dues` rows without an enrollment/period. Per-class billing is deferred.
+- Due status (DUE / PARTIAL / PAID / WAIVED) is **derived** from allocations, not stored, so it can
+  never go out of sync with payments.
+- Payments are split across dues through `payment_allocations`, oldest due first. Overpayment stays
+  as **advance credit** and is applied automatically when the next month's due is created.
+- `billFrom` lets a tutor enter existing students without creating years of old dues.
+
+**Billing rules** (`domain/FeeDueGenerator`): a month is billed if the student was enrolled on any day
+of it (leaving month included), never in the future. Mid-month joins follow the tutor's
+**join-month policy**: full fee (default), prorated to the rupee, or start next month. Due date never
+falls before the joining date. Generation is idempotent — safe to run on every app open; monthly
+dues will be generated on app open + by WorkManager (Phase 3).
 
 ## 6. Screens
 

@@ -2,7 +2,6 @@ package com.softandtech.tuitionmanager.di
 
 import android.content.Context
 import com.softandtech.tuitionmanager.data.db.TuitionDatabase
-import com.softandtech.tuitionmanager.data.db.dao.StudentDao
 import com.softandtech.tuitionmanager.data.security.DatabaseKeyManager
 import com.softandtech.tuitionmanager.data.security.KeystoreKeyWrapper
 import dagger.Module
@@ -34,7 +33,4 @@ object DatabaseModule {
         val key = keyManager.getOrCreateKey()
         return TuitionDatabase.build(context, key).also { key.fill(0) }
     }
-
-    @Provides
-    fun provideStudentDao(db: TuitionDatabase): StudentDao = db.studentDao()
 }

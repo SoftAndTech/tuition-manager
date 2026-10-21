@@ -7,6 +7,7 @@ import com.softandtech.tuitionmanager.data.db.entity.StudentEntity
 import com.softandtech.tuitionmanager.data.security.DatabaseKeyManager
 import com.softandtech.tuitionmanager.data.security.KeystoreKeyWrapper
 import java.io.File
+import java.time.LocalDate
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -38,7 +39,7 @@ class EncryptedDatabaseTest {
     fun dataRoundTripsAndFileIsNotPlainSqlite() = runTest {
         val key = ByteArray(32) { it.toByte() }
         TuitionDatabase.build(context, key, dbName).apply {
-            studentDao().insert(StudentEntity(name = "Asha", joinDate = 20_000))
+            studentDao().insert(StudentEntity(name = "Asha", joinDate = LocalDate.of(2026, 10, 1)))
             assertEquals(1, studentDao().observeActiveCount().first())
             close()
         }
@@ -56,7 +57,7 @@ class EncryptedDatabaseTest {
     @Test(expected = Exception::class)
     fun wrongKeyCannotOpenDatabase() = runTest {
         TuitionDatabase.build(context, ByteArray(32) { 1 }, dbName).apply {
-            studentDao().insert(StudentEntity(name = "Asha", joinDate = 20_000))
+            studentDao().insert(StudentEntity(name = "Asha", joinDate = LocalDate.of(2026, 10, 1)))
             close()
         }
         TuitionDatabase.build(context, ByteArray(32) { 2 }, dbName).studentDao().getById(1)

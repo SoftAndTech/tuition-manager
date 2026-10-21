@@ -3,8 +3,9 @@ package com.softandtech.tuitionmanager.data.db.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.time.LocalDate
 
-/** Dates are stored as epoch days (LocalDate.toEpochDay) to avoid timezone issues. */
+/** Students are never hard-deleted in normal use; set [active] = false to keep fee history. */
 @Entity(tableName = "students")
 data class StudentEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
@@ -13,7 +14,7 @@ data class StudentEntity(
     @ColumnInfo(name = "parent_name") val parentName: String? = null,
     @ColumnInfo(name = "parent_phone") val parentPhone: String? = null,
     @ColumnInfo(name = "class_name") val className: String? = null,
-    @ColumnInfo(name = "join_date") val joinDate: Long,
+    @ColumnInfo(name = "join_date") val joinDate: LocalDate,
     val notes: String? = null,
     val active: Boolean = true,
 )
