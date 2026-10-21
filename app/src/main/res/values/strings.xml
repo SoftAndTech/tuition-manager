@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Tuition Manager</string>
+
+    <string name="nav_dashboard">Home</string>
+    <string name="nav_students">Students</string>
+    <string name="nav_batches">Batches</string>
+    <string name="nav_settings">Settings</string>
+
+    <string name="students_count">%1$d students saved on this device</string>
+    <string name="coming_soon">Coming soon</string>
+    <string name="privacy_tagline">Your data stays encrypted on this phone.</string>
+</resources>
