@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.softandtech.tuitionmanager.data.db.entity.StudentEntity
+import com.softandtech.tuitionmanager.data.db.model.StudentListItem
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -39,6 +40,21 @@ interface StudentDao {
         """,
     )
     fun search(query: String, active: Boolean = true): Flow<List<StudentEntity>>
+
+    /** Same filter as [search], shaped for the list screen with each student's current batches. */
+    @Query(
+        """
+        SELECT s.id, s.name, s.class_name AS className, s.phone, s.parent_phone AS parentPhone,
+               (SELECT GROUP_CONCAT(b.name, ', ') FROM enrollments e JOIN batches b ON b.id = e.batch_id
+                WHERE e.student_id = s.id AND e.left_on IS NULL) AS batchNames
+        FROM students s
+        WHERE s.active = :active
+          AND (:query = '' OR s.name LIKE '%' || :query || '%' OR s.phone LIKE '%' || :query || '%'
+               OR s.parent_phone LIKE '%' || :query || '%' OR s.class_name LIKE '%' || :query || '%')
+        ORDER BY s.name COLLATE NOCASE
+        """,
+    )
+    fun searchListItems(query: String, active: Boolean): Flow<List<StudentListItem>>
 
     @Query("UPDATE students SET active = :active WHERE id = :id")
     suspend fun setActive(id: Long, active: Boolean)

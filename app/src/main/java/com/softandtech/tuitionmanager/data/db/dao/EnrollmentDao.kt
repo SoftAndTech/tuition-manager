@@ -6,6 +6,7 @@ import androidx.room.Query
 import androidx.room.Update
 import com.softandtech.tuitionmanager.data.db.entity.EnrollmentEntity
 import com.softandtech.tuitionmanager.data.db.entity.StudentEntity
+import com.softandtech.tuitionmanager.data.db.model.EnrollmentWithBatch
 import com.softandtech.tuitionmanager.domain.BillableEnrollment
 import java.time.LocalDate
 import kotlinx.coroutines.flow.Flow
@@ -22,8 +23,19 @@ interface EnrollmentDao {
     @Query("SELECT * FROM enrollments WHERE id = :id")
     suspend fun getById(id: Long): EnrollmentEntity?
 
-    @Query("SELECT * FROM enrollments WHERE student_id = :studentId ORDER BY joined_on DESC")
-    fun observeForStudent(studentId: Long): Flow<List<EnrollmentEntity>>
+    /** Current batches first, then past ones; newest first within each group. */
+    @Query(
+        """
+        SELECT e.*, b.name AS batch_name, b.monthly_fee_paise AS batch_fee_paise
+        FROM enrollments e JOIN batches b ON b.id = e.batch_id
+        WHERE e.student_id = :studentId
+        ORDER BY e.left_on IS NOT NULL, e.joined_on DESC
+        """,
+    )
+    fun observeWithBatchForStudent(studentId: Long): Flow<List<EnrollmentWithBatch>>
+
+    @Query("SELECT EXISTS(SELECT 1 FROM enrollments WHERE student_id = :studentId AND batch_id = :batchId AND left_on IS NULL)")
+    suspend fun hasOpenEnrollment(studentId: Long, batchId: Long): Boolean
 
     @Query("UPDATE enrollments SET left_on = :leftOn WHERE student_id = :studentId AND left_on IS NULL")
     suspend fun closeOpenEnrollments(studentId: Long, leftOn: LocalDate)

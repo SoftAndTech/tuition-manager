@@ -3,7 +3,7 @@
 > Working name: **Tuition Manager** (final Play Store name TBD)
 > Owner: Soft And Tech Solutions
 > Platform: Android (Kotlin + Jetpack Compose)
-> Status: **Phase 0 ✅ · Phase 1 ✅ · next: Phase 2 (Students & batches screens)**
+> Status: **Phase 0 ✅ · Phase 1 ✅ · Phase 2 ✅ · next: Phase 3 (Fees)**
 
 ---
 

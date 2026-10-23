@@ -7,19 +7,21 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-// Placeholder brand palette (indigo + amber); final colours are an open question in the plan.
+// Placeholder brand palette (indigo); final colours are an open question in the plan.
+// Material uses `secondary` for text (e.g. the selected tab label), so it must stay dark enough to read.
 private val Indigo = Color(0xFF3949AB)
+private val IndigoDark = Color(0xFF283593)
 private val IndigoLight = Color(0xFFB0BEFF)
-private val Amber = Color(0xFFFFB300)
+private val IndigoPale = Color(0xFFC5CAE9)
 
 private val LightColors = lightColorScheme(
     primary = Indigo,
-    secondary = Amber,
+    secondary = IndigoDark,
 )
 
 private val DarkColors = darkColorScheme(
     primary = IndigoLight,
-    secondary = Amber,
+    secondary = IndigoPale,
 )
 
 @Composable

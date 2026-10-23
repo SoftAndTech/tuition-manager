@@ -2,6 +2,8 @@ package com.softandtech.tuitionmanager.data.db.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
+import com.softandtech.tuitionmanager.data.db.entity.BatchEntity
+import com.softandtech.tuitionmanager.data.db.entity.EnrollmentEntity
 import com.softandtech.tuitionmanager.data.db.entity.FeeDueEntity
 import com.softandtech.tuitionmanager.domain.FeeMath
 import com.softandtech.tuitionmanager.domain.model.AttendanceStatus
@@ -31,3 +33,27 @@ data class StudentOverdue(
 )
 
 data class StatusCount(val status: AttendanceStatus, val count: Int)
+
+/** One row of the students list. [batchNames] lists current batches, comma-separated. */
+data class StudentListItem(
+    val id: Long,
+    val name: String,
+    val className: String?,
+    val phone: String?,
+    val parentPhone: String?,
+    val batchNames: String?,
+)
+
+data class BatchWithCount(
+    @Embedded val batch: BatchEntity,
+    @ColumnInfo(name = "student_count") val studentCount: Int,
+)
+
+data class EnrollmentWithBatch(
+    @Embedded val enrollment: EnrollmentEntity,
+    @ColumnInfo(name = "batch_name") val batchName: String,
+    @ColumnInfo(name = "batch_fee_paise") val batchFeePaise: Long,
+) {
+    val feePaise: Long get() = enrollment.feeOverridePaise ?: batchFeePaise
+    val isCurrent: Boolean get() = enrollment.leftOn == null
+}

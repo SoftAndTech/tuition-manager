@@ -4,6 +4,8 @@ import com.softandtech.tuitionmanager.data.db.TuitionDatabase
 import com.softandtech.tuitionmanager.data.db.entity.BatchEntity
 import com.softandtech.tuitionmanager.data.db.entity.EnrollmentEntity
 import com.softandtech.tuitionmanager.data.db.entity.StudentEntity
+import com.softandtech.tuitionmanager.data.db.model.BatchWithCount
+import com.softandtech.tuitionmanager.data.db.model.EnrollmentWithBatch
 import java.time.LocalDate
 import java.time.YearMonth
 import javax.inject.Inject
@@ -48,6 +50,7 @@ class BatchRepository @Inject constructor(
         billFrom: YearMonth = YearMonth.from(joinedOn),
     ): Long {
         require(feeOverridePaise == null || feeOverridePaise >= 0) { "Fee cannot be negative" }
+        require(!enrollmentDao.hasOpenEnrollment(studentId, batchId)) { "Student is already in this batch" }
         return enrollmentDao.insert(
             EnrollmentEntity(
                 studentId = studentId,
@@ -66,7 +69,12 @@ class BatchRepository @Inject constructor(
         enrollmentDao.update(enrollment.copy(leftOn = leftOn))
     }
 
-    fun observeEnrollments(studentId: Long): Flow<List<EnrollmentEntity>> = enrollmentDao.observeForStudent(studentId)
+    fun observeEnrollments(studentId: Long): Flow<List<EnrollmentWithBatch>> =
+        enrollmentDao.observeWithBatchForStudent(studentId)
+
+    fun observeActiveWithCount(): Flow<List<BatchWithCount>> = batchDao.observeActiveWithCount()
+
+    fun observeBatch(batchId: Long): Flow<BatchEntity?> = batchDao.observeById(batchId)
 
     fun observeStudentsInBatch(batchId: Long, date: LocalDate): Flow<List<StudentEntity>> =
         enrollmentDao.observeStudentsInBatch(batchId, date)

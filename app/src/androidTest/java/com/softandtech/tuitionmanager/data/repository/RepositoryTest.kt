@@ -164,6 +164,35 @@ class RepositoryTest {
     }
 
     @Test
+    fun addWithEnrollments_savesStudentAndBatchesTogether() = runTest {
+        val science = batches.add(BatchEntity(name = "Science", monthlyFeePaise = 80_000))
+        val id = students.add(
+            StudentEntity(name = "  Ravi  ", joinDate = LocalDate.of(2026, 8, 10)),
+            listOf(
+                NewEnrollment(batchId, feeOverridePaise = 90_000, billFrom = YearMonth.of(2026, 10)),
+                NewEnrollment(science, billFrom = YearMonth.of(2026, 10)),
+            ),
+        )
+        assertEquals("Ravi", students.getById(id)?.name)
+        val enrollments = batches.observeEnrollments(id).first()
+        assertEquals(setOf(90_000L, 80_000L), enrollments.map { it.feePaise }.toSet())
+
+        // billFrom = Oct, so no Aug/Sep dues even though he joined in August
+        fees.generateDues(oct21)
+        val periods = fees.observeDues(id).first().map { it.due.period }.toSet()
+        assertEquals(setOf(YearMonth.of(2026, 10)), periods)
+
+        val item = students.observeListItems("ravi").first().single()
+        assertTrue(item.batchNames!!.contains("Science"))
+        assertEquals(1, batches.observeActiveWithCount().first().single { it.batch.id == science }.studentCount)
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun enroll_rejectsDuplicateOpenEnrollment() = runTest {
+        batches.enroll(studentId, batchId, joinedOn = oct21)
+    }
+
+    @Test
     fun search_matchesNameAndPhone() = runTest {
         assertEquals(1, students.observeStudents("ash").first().size)
         assertEquals(1, students.observeStudents("98000").first().size)
