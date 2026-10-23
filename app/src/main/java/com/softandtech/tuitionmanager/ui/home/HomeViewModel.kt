@@ -3,11 +3,15 @@ package com.softandtech.tuitionmanager.ui.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.softandtech.tuitionmanager.R
+import com.softandtech.tuitionmanager.data.db.model.BatchWithCount
 import com.softandtech.tuitionmanager.data.db.model.StudentOverdue
+import com.softandtech.tuitionmanager.data.repository.AttendanceRepository
+import com.softandtech.tuitionmanager.data.repository.BatchRepository
 import com.softandtech.tuitionmanager.data.repository.FeeRepository
 import com.softandtech.tuitionmanager.data.repository.FeeSync
 import com.softandtech.tuitionmanager.data.repository.StudentRepository
 import com.softandtech.tuitionmanager.data.settings.SettingsRepository
+import com.softandtech.tuitionmanager.domain.WeekDays
 import com.softandtech.tuitionmanager.ui.receipt.ReminderTextProvider
 import com.softandtech.tuitionmanager.ui.receipt.Reminders
 import com.softandtech.tuitionmanager.ui.students.StudentDetailEvent
@@ -24,16 +28,32 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
+/** A batch meeting today, and how many of its students have been marked. */
+data class TodayClass(val batch: BatchWithCount, val markedCount: Int) {
+    val isMarked: Boolean get() = markedCount > 0
+}
+
 data class HomeUiState(
     val loading: Boolean = true,
-    val month: YearMonth = YearMonth.now(),
+    val today: LocalDate = LocalDate.now(),
     val billedPaise: Long = 0,
     val collectedPaise: Long = 0,
     val overdue: List<StudentOverdue> = emptyList(),
     val hasProfile: Boolean = true,
+    val todayClasses: List<TodayClass> = emptyList(),
+    val activeStudents: Int = 0,
+    val hasBatches: Boolean = false,
 ) {
+    val month: YearMonth get() = YearMonth.from(today)
     val overdueTotalPaise: Long get() = overdue.sumOf { it.outstandingPaise }
 }
+
+private data class FeeOverview(
+    val billed: Long,
+    val collected: Long,
+    val overdue: List<StudentOverdue>,
+    val hasProfile: Boolean,
+)
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -41,6 +61,8 @@ class HomeViewModel @Inject constructor(
     private val studentRepository: StudentRepository,
     private val settingsRepository: SettingsRepository,
     private val reminderText: ReminderTextProvider,
+    batchRepository: BatchRepository,
+    attendanceRepository: AttendanceRepository,
     feeSync: FeeSync,
     clock: Clock,
 ) : ViewModel() {
@@ -51,21 +73,32 @@ class HomeViewModel @Inject constructor(
     private val _events = Channel<StudentDetailEvent>(Channel.BUFFERED)
     val events = _events.receiveAsFlow()
 
-    val state: StateFlow<HomeUiState> = combine(
+    private val feeOverview = combine(
         feeRepository.observeBilled(month),
         feeRepository.observeCollected(month),
         feeRepository.observeOverdue(today),
         settingsRepository.settings,
-    ) { billed, collected, overdue, settings ->
+    ) { billed, collected, overdue, settings -> FeeOverview(billed, collected, overdue, settings.signature.isNotEmpty()) }
+
+    val state: StateFlow<HomeUiState> = combine(
+        feeOverview,
+        batchRepository.observeActiveWithCount(),
+        attendanceRepository.observeMarkedCounts(today),
+        studentRepository.observeActiveCount(),
+    ) { fees, batches, marked, studentCount ->
         HomeUiState(
             loading = false,
-            month = month,
-            billedPaise = billed,
-            collectedPaise = collected,
-            overdue = overdue,
-            hasProfile = settings.signature.isNotEmpty(),
+            today = today,
+            billedPaise = fees.billed,
+            collectedPaise = fees.collected,
+            overdue = fees.overdue,
+            hasProfile = fees.hasProfile,
+            todayClasses = WeekDays.meetingOn(batches, today.dayOfWeek) { it.batch.daysMask }
+                .map { TodayClass(it, marked[it.batch.id] ?: 0) },
+            activeStudents = studentCount,
+            hasBatches = batches.isNotEmpty(),
         )
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), HomeUiState(month = month))
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), HomeUiState(today = today))
 
     init {
         viewModelScope.launch { feeSync.run() }

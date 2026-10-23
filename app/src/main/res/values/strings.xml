@@ -184,6 +184,52 @@
     <string name="policy_next_month">Start charging from next month</string>
     <string name="settings_privacy_note">Your students\' data is stored only on this phone, encrypted. Nothing is uploaded anywhere.</string>
 
+    <!-- Attendance -->
+    <string name="attendance_title">Attendance</string>
+    <string name="attendance_take">Take attendance</string>
+    <string name="attendance_take_short">Mark</string>
+    <string name="attendance_date">Date</string>
+    <string name="attendance_not_class_day">This batch doesn\'t usually meet on this day.</string>
+    <string name="attendance_counts">%1$d present · %2$d absent · %3$d leave</string>
+    <string name="attendance_all_present">All present</string>
+    <string name="attendance_no_students">No students were in this batch on this date.</string>
+    <string name="attendance_save">Save attendance</string>
+    <string name="attendance_update">Update attendance</string>
+    <string name="attendance_saved">Attendance saved</string>
+    <string name="attendance_present">Present</string>
+    <string name="attendance_absent">Absent</string>
+    <string name="attendance_leave">Leave</string>
+    <string name="attendance_short_present">P</string>
+    <string name="attendance_short_absent">A</string>
+    <string name="attendance_short_leave">L</string>
+    <string name="student_attendance_title">Attendance in %1$s</string>
+    <string name="student_attendance_none">No attendance marked yet this month.</string>
+    <string name="student_attendance_detail">%1$d present · %2$d absent · %3$d leave</string>
+
+    <!-- Dashboard -->
+    <string name="home_stat_students">Students</string>
+    <string name="home_stat_overdue">Overdue</string>
+    <string name="home_today_classes">Today\'s classes (%1$s)</string>
+    <string name="home_no_classes_today">No classes scheduled today.</string>
+    <string name="home_no_batches">Create a batch to see today\'s classes here.</string>
+    <string name="home_marked_count">%1$d of %2$d marked</string>
+    <string name="home_not_marked">Attendance not taken yet</string>
+    <string name="home_marked_cd">Attendance taken</string>
+
+    <!-- Daily reminder notification -->
+    <string name="settings_notifications_header">Notifications</string>
+    <string name="settings_daily_reminder">Daily overdue-fee reminder</string>
+    <string name="settings_daily_reminder_help">A notification at 9 AM when any fees are overdue. Shows only a count and total, never student names.</string>
+    <string name="settings_notify_denied">Notifications are blocked. Allow them in your phone\'s app settings to get reminders.</string>
+    <string name="notify_channel_name">Fee reminders</string>
+    <string name="notify_channel_description">Daily summary of overdue tuition fees</string>
+    <string name="notify_overdue_title">Fees overdue</string>
+    <string name="notify_overdue_public">You have fee reminders</string>
+    <plurals name="notify_overdue_text">
+        <item quantity="one">%1$d student has overdue fees (%2$s). Tap to send reminders.</item>
+        <item quantity="other">%1$d students have overdue fees (%2$s). Tap to send reminders.</item>
+    </plurals>
+
     <plurals name="student_count">
         <item quantity="one">%d student</item>
         <item quantity="other">%d students</item>

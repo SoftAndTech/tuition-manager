@@ -62,6 +62,7 @@ import com.softandtech.tuitionmanager.ui.fees.PaymentActionsDialog
 import com.softandtech.tuitionmanager.ui.fees.PaymentSavedDialog
 import com.softandtech.tuitionmanager.ui.fees.feesSection
 import com.softandtech.tuitionmanager.ui.receipt.Sharing
+import com.softandtech.tuitionmanager.domain.AttendanceSummary
 import com.softandtech.tuitionmanager.domain.Money
 import com.softandtech.tuitionmanager.ui.common.BackTopBar
 import com.softandtech.tuitionmanager.ui.common.ConfirmDialog
@@ -69,6 +70,7 @@ import com.softandtech.tuitionmanager.ui.common.DateField
 import com.softandtech.tuitionmanager.ui.common.FormField
 import com.softandtech.tuitionmanager.ui.common.Formatters
 import java.time.LocalDate
+import java.time.YearMonth
 
 @Composable
 fun StudentDetailScreen(
@@ -77,6 +79,7 @@ fun StudentDetailScreen(
     viewModel: StudentDetailViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val attendance by viewModel.attendance.collectAsStateWithLifecycle()
     val student = state.student
     val context = LocalContext.current
     val snackbar = remember { SnackbarHostState() }
@@ -133,6 +136,7 @@ fun StudentDetailScreen(
                 }
             }
             item { DetailsCard(student) }
+            item { AttendanceCard(attendance, YearMonth.from(viewModel.today)) }
 
             feesSection(
                 fees = state.fees,
@@ -260,6 +264,32 @@ private fun DetailsCard(student: StudentEntity) {
         }
     }
 }
+
+@Composable
+private fun AttendanceCard(summary: AttendanceSummary, month: YearMonth) {
+    Card(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)) {
+        Column(Modifier.padding(16.dp)) {
+            Text(stringResource(R.string.student_attendance_title, Formatters.month(month)), style = MaterialTheme.typography.labelLarge)
+            val percent = summary.percent
+            if (percent == null) {
+                Text(stringResource(R.string.student_attendance_none), style = MaterialTheme.typography.bodyMedium)
+            } else {
+                Text(
+                    "$percent%",
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = if (percent < LOW_ATTENDANCE) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
+                )
+                Text(
+                    stringResource(R.string.student_attendance_detail, summary.present, summary.absent, summary.leave),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+            }
+        }
+    }
+}
+
+/** Below this, the percentage is shown in red as a cue to talk to the parent. */
+private const val LOW_ATTENDANCE = 75
 
 @Composable
 private fun DetailRow(label: String, value: String, callNumber: String? = null) {

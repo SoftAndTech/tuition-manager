@@ -7,6 +7,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Daily overdue-fee reminder (asked only when the tutor turns it on in Settings) -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <application
         android:name=".TuitionApp"
         android:allowBackup="false"

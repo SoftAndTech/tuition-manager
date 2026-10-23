@@ -94,6 +94,9 @@ dependencies {
   // Settings (institute details, receipt prefix, billing policy)
   implementation(libs.androidx.datastore.preferences)
 
+  // Daily overdue-fee check
+  implementation(libs.androidx.work.runtime.ktx)
+
   // Local tests
   testImplementation(libs.junit)
   testImplementation(libs.kotlinx.coroutines.test)
@@ -104,5 +107,6 @@ dependencies {
   androidTestImplementation(libs.androidx.test.runner)
   androidTestImplementation(libs.kotlinx.coroutines.test)
   androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+  androidTestImplementation(libs.androidx.work.testing)
   debugImplementation(libs.androidx.compose.ui.test.manifest)
 }

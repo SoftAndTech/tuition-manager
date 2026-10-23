@@ -37,6 +37,8 @@ data class StudentOverdue(
 
 data class StatusCount(val status: AttendanceStatus, val count: Int)
 
+data class BatchMarkCount(val batchId: Long, val count: Int)
+
 /** One row of the students list. [batchNames] lists current batches, comma-separated. */
 data class StudentListItem(
     val id: Long,

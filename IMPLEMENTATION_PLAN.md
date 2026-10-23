@@ -3,11 +3,16 @@
 > Working name: **Tuition Manager** (final Play Store name TBD)
 > Owner: Soft And Tech Solutions
 > Platform: Android (Kotlin + Jetpack Compose)
-> Status: **Phase 0 ✅ · Phase 1 ✅ · Phase 2 ✅ · Phase 3 ✅ · next: Phase 4 (Attendance & dashboard)**
+> Status: **Phase 0 ✅ · Phase 1 ✅ · Phase 2 ✅ · Phase 3 ✅ · Phase 4 ✅ · next: Phase 5 (Security & backup)**
 >
 > Phase 3 notes: the Settings screen (institute details, UPI ID, receipt prefix, join-month policy)
 > was pulled forward because receipts and reminders need it. Monthly dues are generated on app open
-> and when fee screens open; a daily "fees due" notification (WorkManager) is deferred to Phase 4.
+> and when fee screens open.
+>
+> Phase 4 notes: the daily overdue-fee notification runs at 9 AM via WorkManager, is off by default,
+> and asks for notification permission only when switched on. It shows a count and total, never
+> student names. WorkManager adds WAKE_LOCK, RECEIVE_BOOT_COMPLETED, ACCESS_NETWORK_STATE and
+> FOREGROUND_SERVICE permissions; there is still no INTERNET permission.
 
 ---
 

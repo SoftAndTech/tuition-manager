@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -70,6 +71,7 @@ fun BatchDetailScreen(
     onBack: () -> Unit,
     onEdit: (Long) -> Unit,
     onStudentClick: (Long) -> Unit,
+    onTakeAttendance: (Long) -> Unit,
     viewModel: BatchDetailViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -101,6 +103,11 @@ fun BatchDetailScreen(
                             style = MaterialTheme.typography.titleMedium,
                         )
                         Text(stringResource(R.string.batch_due_day, batch.feeDueDay), style = MaterialTheme.typography.bodyMedium)
+                        if (batch.active && state.students.isNotEmpty()) {
+                            Button(onClick = { onTakeAttendance(batch.id) }, modifier = Modifier.padding(top = 12.dp)) {
+                                Text(stringResource(R.string.attendance_take))
+                            }
+                        }
                     }
                 }
             }

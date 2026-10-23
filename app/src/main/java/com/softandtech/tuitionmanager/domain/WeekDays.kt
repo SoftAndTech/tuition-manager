@@ -10,5 +10,12 @@ object WeekDays {
 
     fun contains(mask: Int, day: DayOfWeek): Boolean = mask and bit(day) != 0
 
+    /**
+     * Batches to show under "Today's classes". If the tutor hasn't set class days on any batch,
+     * we can't know the timetable, so every batch is shown rather than an empty list.
+     */
+    fun <T> meetingOn(items: List<T>, day: DayOfWeek, maskOf: (T) -> Int): List<T> =
+        if (items.all { maskOf(it) == 0 }) items else items.filter { contains(maskOf(it), day) }
+
     private fun bit(day: DayOfWeek) = 1 shl (day.value - 1)
 }

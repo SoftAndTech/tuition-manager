@@ -26,6 +26,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.softandtech.tuitionmanager.R
+import com.softandtech.tuitionmanager.ui.attendance.AttendanceScreen
 import com.softandtech.tuitionmanager.ui.batches.BatchDetailScreen
 import com.softandtech.tuitionmanager.ui.batches.BatchEditScreen
 import com.softandtech.tuitionmanager.ui.batches.BatchesScreen
@@ -34,6 +35,7 @@ import com.softandtech.tuitionmanager.ui.settings.SettingsScreen
 import com.softandtech.tuitionmanager.ui.students.StudentDetailScreen
 import com.softandtech.tuitionmanager.ui.students.StudentEditScreen
 import com.softandtech.tuitionmanager.ui.students.StudentsScreen
+import java.time.LocalDate
 import kotlinx.serialization.Serializable
 
 /** Route argument meaning "create a new record". Room ids start at 1. */
@@ -48,6 +50,8 @@ const val NEW_ID = 0L
 @Serializable data class StudentEditRoute(val studentId: Long = NEW_ID)
 @Serializable data class BatchDetailRoute(val batchId: Long)
 @Serializable data class BatchEditRoute(val batchId: Long = NEW_ID)
+/** [epochDay] is the register's date (LocalDate.toEpochDay), defaulting to today. */
+@Serializable data class AttendanceRoute(val batchId: Long, val epochDay: Long = LocalDate.now().toEpochDay())
 
 private data class TopLevelDestination(
     val route: Any,
@@ -101,6 +105,7 @@ fun AppNavHost() {
             composable<DashboardRoute> {
                 HomeScreen(
                     onStudentClick = { navController.navigate(StudentDetailRoute(it)) },
+                    onTakeAttendance = { navController.navigate(AttendanceRoute(it)) },
                     onOpenSettings = {
                         navController.navigate(SettingsRoute) {
                             popUpTo(navController.graph.findStartDestination().id) { saveState = true }
@@ -150,7 +155,11 @@ fun AppNavHost() {
                     onBack = navController::popBackStack,
                     onEdit = { navController.navigate(BatchEditRoute(it)) },
                     onStudentClick = { navController.navigate(StudentDetailRoute(it)) },
+                    onTakeAttendance = { navController.navigate(AttendanceRoute(it)) },
                 )
+            }
+            composable<AttendanceRoute> {
+                AttendanceScreen(onBack = navController::popBackStack)
             }
             composable<BatchEditRoute> {
                 BatchEditScreen(

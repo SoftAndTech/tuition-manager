@@ -1,6 +1,19 @@
 package com.softandtech.tuitionmanager.ui.settings
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
+import androidx.compose.foundation.selection.toggleable
+import androidx.compose.material3.Switch
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.core.content.ContextCompat
+import com.softandtech.tuitionmanager.notify.ReminderScheduler
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -61,10 +74,23 @@ data class SettingsUiState(
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository,
+    private val reminderScheduler: ReminderScheduler,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(SettingsUiState())
     val state: StateFlow<SettingsUiState> = _state.asStateFlow()
+
+    val dailyReminder: StateFlow<Boolean> = settingsRepository.settings
+        .map { it.dailyReminder }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
+
+    /** Takes effect immediately; the screen has already obtained notification permission if needed. */
+    fun setDailyReminder(enabled: Boolean) {
+        viewModelScope.launch {
+            settingsRepository.setDailyReminder(enabled)
+            reminderScheduler.apply(enabled)
+        }
+    }
 
     private val _saved = Channel<Unit>(Channel.CONFLATED)
     val saved = _saved.receiveAsFlow()
@@ -99,11 +125,24 @@ class SettingsViewModel @Inject constructor(
 @Composable
 fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val dailyReminder by viewModel.dailyReminder.collectAsStateWithLifecycle()
     val snackbar = remember { SnackbarHostState() }
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         viewModel.saved.collect { snackbar.showSnackbar(context.getString(R.string.settings_saved)) }
+    }
+
+    val permissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+        if (granted) viewModel.setDailyReminder(true)
+        else scope.launch { snackbar.showSnackbar(context.getString(R.string.settings_notify_denied)) }
+    }
+    val onReminderToggle: (Boolean) -> Unit = { enable ->
+        val needsPermission = enable && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
+        if (needsPermission) permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        else viewModel.setDailyReminder(enable)
     }
 
     Scaffold(
@@ -167,6 +206,22 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
 
             Button(onClick = viewModel::save, modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
                 Text(stringResource(R.string.action_save))
+            }
+
+            Text(stringResource(R.string.settings_notifications_header), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 16.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth().toggleable(value = dailyReminder, role = Role.Switch, onValueChange = onReminderToggle),
+            ) {
+                Column(Modifier.weight(1f)) {
+                    Text(stringResource(R.string.settings_daily_reminder), style = MaterialTheme.typography.bodyLarge)
+                    Text(
+                        stringResource(R.string.settings_daily_reminder_help),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+                Switch(checked = dailyReminder, onCheckedChange = null)
             }
 
             Card(Modifier.fillMaxWidth().padding(top = 8.dp)) {

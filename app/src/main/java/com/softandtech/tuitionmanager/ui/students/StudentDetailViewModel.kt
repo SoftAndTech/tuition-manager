@@ -11,12 +11,14 @@ import com.softandtech.tuitionmanager.data.db.entity.PaymentEntity
 import com.softandtech.tuitionmanager.data.db.entity.StudentEntity
 import com.softandtech.tuitionmanager.data.db.model.EnrollmentWithBatch
 import com.softandtech.tuitionmanager.data.db.model.FeeDueWithPaid
+import com.softandtech.tuitionmanager.data.repository.AttendanceRepository
 import com.softandtech.tuitionmanager.data.repository.BatchRepository
 import com.softandtech.tuitionmanager.data.repository.FeeRepository
 import com.softandtech.tuitionmanager.data.repository.FeeSync
 import com.softandtech.tuitionmanager.data.repository.StudentRepository
 import com.softandtech.tuitionmanager.data.settings.AppSettings
 import com.softandtech.tuitionmanager.data.settings.SettingsRepository
+import com.softandtech.tuitionmanager.domain.AttendanceSummary
 import com.softandtech.tuitionmanager.domain.Money
 import com.softandtech.tuitionmanager.domain.model.PaymentMode
 import com.softandtech.tuitionmanager.ui.navigation.StudentDetailRoute
@@ -27,6 +29,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import java.io.File
 import java.time.Clock
 import java.time.LocalDate
+import java.time.YearMonth
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -69,6 +72,7 @@ class StudentDetailViewModel @Inject constructor(
     private val studentRepository: StudentRepository,
     private val batchRepository: BatchRepository,
     private val feeRepository: FeeRepository,
+    attendanceRepository: AttendanceRepository,
     private val feeSync: FeeSync,
     private val settingsRepository: SettingsRepository,
     private val receiptPdfWriter: ReceiptPdfWriter,
@@ -107,6 +111,11 @@ class StudentDetailViewModel @Inject constructor(
             fees = fees,
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), StudentDetailUiState())
+
+    /** Attendance for the current month so far. */
+    val attendance: StateFlow<AttendanceSummary> = attendanceRepository
+        .observeSummary(studentId, YearMonth.from(today).atDay(1), today)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), AttendanceSummary(0, 0, 0))
 
     init {
         // Make sure this month's dues exist before showing what the student owes

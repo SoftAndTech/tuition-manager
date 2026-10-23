@@ -48,4 +48,17 @@ class FeeMathTest {
         assertTrue(WeekDays.contains(mask, DayOfWeek.WEDNESDAY))
         assertFalse(WeekDays.contains(mask, DayOfWeek.TUESDAY))
     }
+
+    @Test
+    fun meetingOn_filtersByDay_orShowsAllWhenNoTimetable() {
+        val monWed = WeekDays.toMask(listOf(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY))
+        val sat = WeekDays.toMask(listOf(DayOfWeek.SATURDAY))
+        val batches = listOf("Maths" to monWed, "Art" to sat, "Unscheduled" to 0)
+
+        assertEquals(listOf("Maths"), WeekDays.meetingOn(batches, DayOfWeek.MONDAY) { it.second }.map { it.first })
+        assertEquals(emptyList<String>(), WeekDays.meetingOn(batches, DayOfWeek.SUNDAY) { it.second }.map { it.first })
+
+        val noTimetable = listOf("A" to 0, "B" to 0)
+        assertEquals(listOf("A", "B"), WeekDays.meetingOn(noTimetable, DayOfWeek.SUNDAY) { it.second }.map { it.first })
+    }
 }

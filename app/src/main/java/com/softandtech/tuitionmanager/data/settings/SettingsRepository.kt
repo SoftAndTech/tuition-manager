@@ -2,6 +2,7 @@ package com.softandtech.tuitionmanager.data.settings
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.softandtech.tuitionmanager.domain.model.JoinMonthPolicy
@@ -19,6 +20,8 @@ data class AppSettings(
     val upiId: String = "",
     val receiptPrefix: String = DEFAULT_RECEIPT_PREFIX,
     val joinMonthPolicy: JoinMonthPolicy = JoinMonthPolicy.FULL,
+    /** Morning notification when fees are overdue. Off until the tutor turns it on (it needs a permission). */
+    val dailyReminder: Boolean = false,
 ) {
     /** Name to sign receipts and messages with: institute, else tutor, else empty. */
     val signature: String get() = instituteName.ifBlank { tutorName }.trim()
@@ -44,6 +47,7 @@ class SettingsRepository @Inject constructor(
             upiId = p[UPI].orEmpty(),
             receiptPrefix = p[PREFIX] ?: AppSettings.DEFAULT_RECEIPT_PREFIX,
             joinMonthPolicy = p[POLICY]?.let { runCatching { JoinMonthPolicy.valueOf(it) }.getOrNull() } ?: JoinMonthPolicy.FULL,
+            dailyReminder = p[DAILY_REMINDER] ?: false,
         )
     }
 
@@ -60,6 +64,11 @@ class SettingsRepository @Inject constructor(
         }
     }
 
+    /** Saved on its own (not with the profile form) because it takes effect immediately. */
+    suspend fun setDailyReminder(enabled: Boolean) {
+        dataStore.edit { it[DAILY_REMINDER] = enabled }
+    }
+
     private companion object {
         val INSTITUTE = stringPreferencesKey("institute_name")
         val TUTOR = stringPreferencesKey("tutor_name")
@@ -67,5 +76,6 @@ class SettingsRepository @Inject constructor(
         val UPI = stringPreferencesKey("upi_id")
         val PREFIX = stringPreferencesKey("receipt_prefix")
         val POLICY = stringPreferencesKey("join_month_policy")
+        val DAILY_REMINDER = booleanPreferencesKey("daily_reminder")
     }
 }
