@@ -29,7 +29,8 @@ import com.softandtech.tuitionmanager.R
 import com.softandtech.tuitionmanager.ui.batches.BatchDetailScreen
 import com.softandtech.tuitionmanager.ui.batches.BatchEditScreen
 import com.softandtech.tuitionmanager.ui.batches.BatchesScreen
-import com.softandtech.tuitionmanager.ui.common.PlaceholderScreen
+import com.softandtech.tuitionmanager.ui.home.HomeScreen
+import com.softandtech.tuitionmanager.ui.settings.SettingsScreen
 import com.softandtech.tuitionmanager.ui.students.StudentDetailScreen
 import com.softandtech.tuitionmanager.ui.students.StudentEditScreen
 import com.softandtech.tuitionmanager.ui.students.StudentsScreen
@@ -97,8 +98,18 @@ fun AppNavHost() {
             startDestination = DashboardRoute,
             modifier = Modifier.padding(innerPadding).consumeWindowInsets(innerPadding),
         ) {
-            composable<DashboardRoute> { PlaceholderScreen(R.string.nav_dashboard) }
-            composable<SettingsRoute> { PlaceholderScreen(R.string.nav_settings) }
+            composable<DashboardRoute> {
+                HomeScreen(
+                    onStudentClick = { navController.navigate(StudentDetailRoute(it)) },
+                    onOpenSettings = {
+                        navController.navigate(SettingsRoute) {
+                            popUpTo(navController.graph.findStartDestination().id) { saveState = true }
+                            launchSingleTop = true
+                        }
+                    },
+                )
+            }
+            composable<SettingsRoute> { SettingsScreen() }
 
             composable<StudentsRoute> {
                 StudentsScreen(

@@ -23,6 +23,9 @@ data class FeeDueWithPaid(
 
 data class ExistingPeriod(val enrollmentId: Long, val period: YearMonth)
 
+/** One "paid for" line on a receipt: how much of the payment went to which due. */
+data class ReceiptLine(val title: String, val period: YearMonth?, val amountPaise: Long)
+
 data class StudentOverdue(
     val studentId: Long,
     val name: String,

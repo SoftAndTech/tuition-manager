@@ -5,7 +5,9 @@ import com.softandtech.tuitionmanager.data.db.TuitionDatabase
 import com.softandtech.tuitionmanager.data.db.entity.FeeDueEntity
 import com.softandtech.tuitionmanager.data.db.entity.PaymentAllocationEntity
 import com.softandtech.tuitionmanager.data.db.entity.PaymentEntity
+import com.softandtech.tuitionmanager.data.db.entity.StudentEntity
 import com.softandtech.tuitionmanager.data.db.model.FeeDueWithPaid
+import com.softandtech.tuitionmanager.data.db.model.ReceiptLine
 import com.softandtech.tuitionmanager.data.db.model.StudentOverdue
 import com.softandtech.tuitionmanager.domain.FeeDueGenerator
 import com.softandtech.tuitionmanager.domain.PaymentAllocator
@@ -16,6 +18,18 @@ import java.time.YearMonth
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+
+data class ReceiptData(
+    val payment: PaymentEntity,
+    val student: StudentEntity,
+    val lines: List<ReceiptLine>,
+    /** What the student still owes after this and all other payments. */
+    val balanceDuePaise: Long,
+) {
+    /** Part of the payment not yet applied to any due — held as advance for future months. */
+    val advancePaise: Long get() = payment.amountPaise - lines.sumOf { it.amountPaise }
+}
 
 /**
  * Fees, payments and receipts. All amounts are in paise (₹1 = 100).
@@ -103,6 +117,21 @@ class FeeRepository @Inject constructor(
     }
 
     suspend fun allocationsFor(paymentId: Long): List<PaymentAllocationEntity> = paymentDao.allocationsFor(paymentId)
+
+    /** Everything printed on a receipt. Null if the payment was deleted. */
+    suspend fun getReceipt(paymentId: Long): ReceiptData? = db.withTransaction {
+        val payment = paymentDao.getById(paymentId) ?: return@withTransaction null
+        val student = db.studentDao().getById(payment.studentId) ?: return@withTransaction null
+        ReceiptData(
+            payment = payment,
+            student = student,
+            lines = paymentDao.receiptLines(paymentId),
+            balanceDuePaise = feeDueDao.observeTotalOutstandingForStudent(student.id).first(),
+        )
+    }
+
+    /** Dues already due on [asOf] and not fully paid, oldest first. */
+    suspend fun unpaidDues(studentId: Long, asOf: LocalDate): List<FeeDueWithPaid> = feeDueDao.unpaidDueBy(studentId, asOf)
 
     fun observeDues(studentId: Long): Flow<List<FeeDueWithPaid>> = feeDueDao.observeForStudent(studentId)
 

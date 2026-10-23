@@ -6,7 +6,6 @@
     <string name="nav_students">Students</string>
     <string name="nav_batches">Batches</string>
     <string name="nav_settings">Settings</string>
-    <string name="coming_soon">Coming soon</string>
 
     <!-- Common actions -->
     <string name="action_back">Back</string>
@@ -90,6 +89,100 @@
     <string name="action_archive">Archive</string>
     <string name="archive_title">Archive %1$s?</string>
     <string name="archive_text">No new fees will be added for this batch. Students and past records are kept.</string>
+
+    <!-- Fees -->
+    <string name="action_done">Done</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_share_receipt">Share receipt</string>
+    <string name="action_waive">Waive</string>
+    <string name="action_unwaive">Undo waiver</string>
+    <string name="error_title_required">Enter what the charge is for</string>
+    <string name="mode_cash">Cash</string>
+    <string name="mode_upi">UPI</string>
+    <string name="mode_bank">Bank transfer</string>
+    <string name="mode_other">Other</string>
+    <string name="fees_due_now">Due now</string>
+    <string name="fees_advance">Advance paid: %1$s</string>
+    <string name="fees_collect">Collect fee</string>
+    <string name="fees_remind">Remind</string>
+    <string name="fees_history">Fee history</string>
+    <string name="fees_add_charge">Add charge</string>
+    <string name="fees_no_dues">No fees yet. Monthly fees appear once the student is in a batch.</string>
+    <string name="fees_payments">Payments</string>
+    <string name="fees_no_payments">No payments recorded yet.</string>
+    <string name="due_partial_detail">%1$s paid of %2$s</string>
+    <string name="due_on">due %1$s</string>
+    <string name="status_paid">Paid</string>
+    <string name="status_partial">Part paid</string>
+    <string name="status_due">Due</string>
+    <string name="status_waived">Waived</string>
+    <string name="field_amount">Amount (₹)</string>
+    <string name="field_paid_on">Payment date</string>
+    <string name="field_note_optional">Note (optional)</string>
+    <string name="field_charge_title">What is it for?</string>
+    <string name="charge_title_hint">e.g. Admission fee, Books</string>
+    <string name="field_due_date">Due date</string>
+    <string name="due_waive_text">Waive this fee? It will no longer count as owed. Anything already paid against it stays recorded.</string>
+    <string name="due_unwaive_text">Undo the waiver? This fee will count as owed again.</string>
+    <string name="payment_delete_text">Delete this payment? Only do this if it was entered by mistake. The fees it covered will show as unpaid again.</string>
+    <string name="payment_saved_title">Payment saved</string>
+    <string name="payment_saved_text">%1$s received. Receipt %2$s.</string>
+
+    <!-- Reminders (sent via WhatsApp; the tutor reviews and taps Send) -->
+    <string name="reminder_greeting">Hello,</string>
+    <string name="reminder_greeting_named">Dear %1$s,</string>
+    <string name="reminder_body">This is a gentle reminder that tuition fees of %1$s for %2$s are pending (%3$s).</string>
+    <string name="reminder_upi">You can pay by UPI to: %1$s</string>
+    <string name="reminder_thanks">Thank you,</string>
+    <string name="reminder_more">and %1$d more</string>
+    <string name="reminder_nothing_due">Nothing is due yet for this student.</string>
+    <string name="reminder_no_phone">Add a parent or student phone number to send reminders.</string>
+    <string name="reminder_cannot_open">Couldn\'t open WhatsApp or a browser on this phone.</string>
+
+    <!-- Receipt PDF -->
+    <string name="receipt_title">FEE RECEIPT</string>
+    <string name="receipt_no">No. %1$s</string>
+    <string name="receipt_date">Date: %1$s</string>
+    <string name="receipt_received_from">Received from</string>
+    <string name="receipt_paid_for">Paid for</string>
+    <string name="receipt_amount">Amount</string>
+    <string name="receipt_more_items">%1$d more items</string>
+    <string name="receipt_advance">Advance (for future fees)</string>
+    <string name="receipt_total">Total received</string>
+    <string name="receipt_mode">Payment mode: %1$s</string>
+    <string name="receipt_note">Note: %1$s</string>
+    <string name="receipt_balance">Balance still due: %1$s</string>
+    <string name="receipt_no_balance">No balance due. Thank you!</string>
+    <string name="receipt_footer">Computer-generated receipt · Tuition Manager</string>
+    <string name="receipt_share_title">Share receipt</string>
+    <string name="receipt_share_message">Fee receipt %1$s for %2$s: %3$s received. Thank you!</string>
+
+    <!-- Home -->
+    <string name="home_setup_profile">Add your institute name and UPI ID so they appear on receipts and reminders.</string>
+    <string name="home_setup_action">Set up</string>
+    <string name="home_this_month">Collected in %1$s</string>
+    <string name="home_collected_of">of %1$s billed this month</string>
+    <string name="home_overdue">Fees overdue</string>
+    <string name="home_no_overdue">No overdue fees.</string>
+    <string name="home_overdue_detail">%1$s · overdue since %2$s</string>
+    <string name="home_remind_cd">Send WhatsApp reminder to %1$s</string>
+
+    <!-- Settings -->
+    <string name="settings_saved">Settings saved</string>
+    <string name="settings_profile_header">Your details</string>
+    <string name="settings_profile_help">Shown on receipts and reminder messages.</string>
+    <string name="field_institute">Institute / tuition name</string>
+    <string name="field_tutor_name">Your name</string>
+    <string name="field_tutor_phone">Your phone</string>
+    <string name="field_upi">UPI ID</string>
+    <string name="upi_hint">e.g. yourname@okaxis</string>
+    <string name="field_receipt_prefix">Receipt number prefix</string>
+    <string name="error_upi_invalid">Enter a UPI ID like name@bank</string>
+    <string name="settings_join_policy">When a student joins mid-month</string>
+    <string name="policy_full">Charge the full month</string>
+    <string name="policy_prorated">Charge only the remaining days</string>
+    <string name="policy_next_month">Start charging from next month</string>
+    <string name="settings_privacy_note">Your students\' data is stored only on this phone, encrypted. Nothing is uploaded anywhere.</string>
 
     <plurals name="student_count">
         <item quantity="one">%d student</item>

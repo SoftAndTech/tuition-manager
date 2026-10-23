@@ -91,6 +91,9 @@ dependencies {
   ksp(libs.androidx.room.compiler)
   implementation(libs.sqlcipher.android)
 
+  // Settings (institute details, receipt prefix, billing policy)
+  implementation(libs.androidx.datastore.preferences)
+
   // Local tests
   testImplementation(libs.junit)
   testImplementation(libs.kotlinx.coroutines.test)

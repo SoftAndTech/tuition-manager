@@ -66,6 +66,20 @@ interface FeeDueDao {
     )
     fun observeTotalOutstandingForStudent(studentId: Long): Flow<Long>
 
+    /** Non-waived dues with money still owed, oldest first, with paid amounts — used for reminders. */
+    @Query(
+        """
+        SELECT * FROM (
+            SELECT d.*, COALESCE((SELECT SUM(a.amount_paise) FROM payment_allocations a WHERE a.fee_due_id = d.id), 0) AS paid_paise
+            FROM fee_dues d
+            WHERE d.student_id = :studentId AND d.waived = 0 AND d.due_date <= :asOf
+        )
+        WHERE paid_paise < amount_paise
+        ORDER BY due_date, id
+        """,
+    )
+    suspend fun unpaidDueBy(studentId: Long, asOf: LocalDate): List<FeeDueWithPaid>
+
     /** Students with money overdue (due date before [today]), longest overdue first. */
     @Query(
         """

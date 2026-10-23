@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import com.softandtech.tuitionmanager.data.db.entity.PaymentAllocationEntity
 import com.softandtech.tuitionmanager.data.db.entity.PaymentEntity
+import com.softandtech.tuitionmanager.data.db.model.ReceiptLine
 import com.softandtech.tuitionmanager.domain.PaymentCredit
 import java.time.LocalDate
 import kotlinx.coroutines.flow.Flow
@@ -33,6 +34,16 @@ interface PaymentDao {
 
     @Query("SELECT * FROM payment_allocations WHERE payment_id = :paymentId")
     suspend fun allocationsFor(paymentId: Long): List<PaymentAllocationEntity>
+
+    @Query(
+        """
+        SELECT d.title AS title, d.period AS period, a.amount_paise AS amountPaise
+        FROM payment_allocations a JOIN fee_dues d ON d.id = a.fee_due_id
+        WHERE a.payment_id = :paymentId
+        ORDER BY d.due_date, d.id
+        """,
+    )
+    suspend fun receiptLines(paymentId: Long): List<ReceiptLine>
 
     /** A student's payments that still have unspent money, oldest first. */
     @Query(

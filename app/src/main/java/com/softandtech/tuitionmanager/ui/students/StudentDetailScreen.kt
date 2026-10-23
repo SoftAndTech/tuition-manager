@@ -29,9 +29,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,8 +51,17 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.softandtech.tuitionmanager.R
 import com.softandtech.tuitionmanager.data.db.entity.BatchEntity
+import com.softandtech.tuitionmanager.data.db.entity.PaymentEntity
 import com.softandtech.tuitionmanager.data.db.entity.StudentEntity
 import com.softandtech.tuitionmanager.data.db.model.EnrollmentWithBatch
+import com.softandtech.tuitionmanager.data.db.model.FeeDueWithPaid
+import com.softandtech.tuitionmanager.ui.fees.AddChargeDialog
+import com.softandtech.tuitionmanager.ui.fees.CollectPaymentDialog
+import com.softandtech.tuitionmanager.ui.fees.DueActionsDialog
+import com.softandtech.tuitionmanager.ui.fees.PaymentActionsDialog
+import com.softandtech.tuitionmanager.ui.fees.PaymentSavedDialog
+import com.softandtech.tuitionmanager.ui.fees.feesSection
+import com.softandtech.tuitionmanager.ui.receipt.Sharing
 import com.softandtech.tuitionmanager.domain.Money
 import com.softandtech.tuitionmanager.ui.common.BackTopBar
 import com.softandtech.tuitionmanager.ui.common.ConfirmDialog
@@ -66,12 +78,34 @@ fun StudentDetailScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val student = state.student
+    val context = LocalContext.current
+    val snackbar = remember { SnackbarHostState() }
 
     var showAddToBatch by remember { mutableStateOf(false) }
     var leaving by remember { mutableStateOf<EnrollmentWithBatch?>(null) }
     var confirmMarkLeft by remember { mutableStateOf(false) }
+    var showCollect by remember { mutableStateOf(false) }
+    var showAddCharge by remember { mutableStateOf(false) }
+    var selectedDue by remember { mutableStateOf<FeeDueWithPaid?>(null) }
+    var selectedPayment by remember { mutableStateOf<PaymentEntity?>(null) }
+    var savedPayment by remember { mutableStateOf<PaymentEntity?>(null) }
+
+    LaunchedEffect(Unit) {
+        viewModel.events.collect { event ->
+            when (event) {
+                is StudentDetailEvent.PaymentSaved -> savedPayment = event.payment
+                is StudentDetailEvent.ShareReceipt -> Sharing.sharePdf(context, event.file, event.message)
+                is StudentDetailEvent.OpenReminder ->
+                    if (!Sharing.openWhatsApp(context, event.waNumber, event.message)) {
+                        snackbar.showSnackbar(context.getString(R.string.reminder_cannot_open))
+                    }
+                is StudentDetailEvent.Message -> snackbar.showSnackbar(context.getString(event.text))
+            }
+        }
+    }
 
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbar) },
         topBar = {
             BackTopBar(
                 title = student?.name.orEmpty(),
@@ -99,6 +133,16 @@ fun StudentDetailScreen(
                 }
             }
             item { DetailsCard(student) }
+
+            feesSection(
+                fees = state.fees,
+                canCollect = true,
+                onCollect = { showCollect = true },
+                onRemind = viewModel::sendReminder,
+                onAddCharge = { showAddCharge = true },
+                onDueClick = { selectedDue = it },
+                onPaymentClick = { selectedPayment = it },
+            )
 
             item {
                 Row(
@@ -159,6 +203,37 @@ fun StudentDetailScreen(
             confirmLabel = stringResource(R.string.action_leave_batch),
             onConfirm = { viewModel.leaveBatch(enrollment) },
             onDismiss = { leaving = null },
+        )
+    }
+    if (showCollect) {
+        CollectPaymentDialog(
+            suggestedPaise = state.fees.outstandingPaise,
+            today = viewModel.today,
+            onSave = viewModel::collectPayment,
+            onDismiss = { showCollect = false },
+        )
+    }
+    if (showAddCharge) {
+        AddChargeDialog(today = viewModel.today, onSave = viewModel::addCharge, onDismiss = { showAddCharge = false })
+    }
+    selectedDue?.let { due ->
+        DueActionsDialog(due, onSetWaived = { viewModel.setWaived(due.due.id, it) }, onDismiss = { selectedDue = null })
+    }
+    selectedPayment?.let { payment ->
+        PaymentActionsDialog(
+            payment = payment,
+            receiptPrefix = state.fees.settings.receiptPrefix,
+            onShare = { viewModel.shareReceipt(payment.id) },
+            onDelete = { viewModel.deletePayment(payment.id) },
+            onDismiss = { selectedPayment = null },
+        )
+    }
+    savedPayment?.let { payment ->
+        PaymentSavedDialog(
+            payment = payment,
+            receiptPrefix = state.fees.settings.receiptPrefix,
+            onShare = { viewModel.shareReceipt(payment.id) },
+            onDismiss = { savedPayment = null },
         )
     }
     if (confirmMarkLeft && student != null) {

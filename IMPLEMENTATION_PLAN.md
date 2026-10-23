@@ -3,7 +3,11 @@
 > Working name: **Tuition Manager** (final Play Store name TBD)
 > Owner: Soft And Tech Solutions
 > Platform: Android (Kotlin + Jetpack Compose)
-> Status: **Phase 0 ✅ · Phase 1 ✅ · Phase 2 ✅ · next: Phase 3 (Fees)**
+> Status: **Phase 0 ✅ · Phase 1 ✅ · Phase 2 ✅ · Phase 3 ✅ · next: Phase 4 (Attendance & dashboard)**
+>
+> Phase 3 notes: the Settings screen (institute details, UPI ID, receipt prefix, join-month policy)
+> was pulled forward because receipts and reminders need it. Monthly dues are generated on app open
+> and when fee screens open; a daily "fees due" notification (WorkManager) is deferred to Phase 4.
 
 ---
 
