@@ -230,6 +230,90 @@
         <item quantity="other">%1$d students have overdue fees (%2$s). Tap to send reminders.</item>
     </plurals>
 
+    <!-- App lock -->
+    <string name="pin_digits_entered">%1$d digits entered</string>
+    <string name="pin_delete">Delete digit</string>
+    <string name="pin_ok">Done</string>
+    <string name="lock_enter_pin">Enter your PIN</string>
+    <string name="lock_wrong_pin">Wrong PIN. %1$d tries left before a short wait.</string>
+    <string name="lock_wait">Too many wrong tries. Try again in %1$d s.</string>
+    <string name="lock_biometric_title">Unlock Tuition Manager</string>
+    <string name="lock_use_pin">Use PIN</string>
+    <string name="lock_use_biometric">Use fingerprint</string>
+    <string name="lock_forgot_pin">Forgot PIN?</string>
+    <string name="lock_forgot_title">Forgot your PIN?</string>
+    <string name="lock_forgot_text">For your students\' privacy, the PIN can\'t be recovered or bypassed. You can erase everything on this phone and start again, then restore your data from a backup file if you have one.</string>
+    <string name="action_erase_everything">Erase all data</string>
+    <string name="pin_setup_title">Set up PIN</string>
+    <string name="pin_change_title">Change PIN</string>
+    <string name="pin_remove_title">Remove PIN</string>
+    <string name="pin_setup_help">4 to 6 digits. You\'ll need it to open the app.</string>
+    <string name="pin_enter_current">Enter your current PIN</string>
+    <string name="pin_choose_new">Choose a new PIN</string>
+    <string name="pin_confirm_new">Enter the new PIN again</string>
+    <string name="pin_wrong_current">That\'s not your current PIN</string>
+    <string name="pin_too_many">Too many wrong tries. Wait a little and try again.</string>
+    <string name="pin_mismatch">The PINs didn\'t match. Choose your new PIN again.</string>
+
+    <!-- Security settings -->
+    <string name="security_title">Security &amp; app lock</string>
+    <string name="settings_security_summary">PIN, fingerprint, auto-lock</string>
+    <string name="security_lock_header">App lock</string>
+    <string name="security_lock_on">The app asks for your PIN when it opens.</string>
+    <string name="security_lock_off">Anyone holding your unlocked phone can open the app. Set a PIN to protect your students\' details.</string>
+    <string name="security_set_pin">Set up PIN</string>
+    <string name="security_change_pin">Change PIN</string>
+    <string name="security_remove_pin">Remove PIN</string>
+    <string name="security_biometric">Unlock with fingerprint</string>
+    <string name="security_biometric_help">Use your fingerprint or face instead of typing the PIN.</string>
+    <string name="security_biometric_unavailable">No fingerprint or face unlock is set up on this phone.</string>
+    <string name="security_auto_lock">Lock again after leaving the app</string>
+    <string name="auto_lock_immediately">Immediately</string>
+    <plurals name="auto_lock_after_minutes">
+        <item quantity="one">After %d minute</item>
+        <item quantity="other">After %d minutes</item>
+    </plurals>
+    <string name="security_secure_screen">Hide app in recent apps</string>
+    <string name="security_secure_screen_help">Blanks the app preview and blocks screenshots.</string>
+    <string name="security_erase_header">Erase all data</string>
+    <string name="security_erase_help">Deletes every student, fee, payment and setting from this phone. Make a backup first if you\'ll need them.</string>
+    <string name="security_erase_confirm_title">Erase everything?</string>
+    <string name="security_erase_confirm_text">This can\'t be undone. All data in Tuition Manager on this phone will be deleted and the app will close.</string>
+
+    <!-- Backup & restore -->
+    <string name="backup_title">Backup &amp; restore</string>
+    <string name="settings_backup_summary">Save an encrypted copy of your data</string>
+    <string name="backup_explainer">Your data lives only on this phone. If the phone is lost or replaced, a backup is the only way to get it back.\n\nA backup is a single file locked with a passphrase you choose. Save it somewhere safe, such as Google Drive or a WhatsApp chat with yourself. Nobody, including us, can open it without the passphrase, so don\'t forget it.</string>
+    <string name="backup_last_never">Last backup: never</string>
+    <string name="backup_last">Last backup: %1$s</string>
+    <string name="backup_create">Create backup</string>
+    <string name="backup_passphrase_title">Choose a backup passphrase</string>
+    <string name="backup_passphrase_help">At least 8 characters. Write it down. Without it the backup can\'t be opened.</string>
+    <string name="backup_done">Backup saved</string>
+    <string name="backup_failed">Couldn\'t save the backup. Try another location.</string>
+    <string name="restore_header">Restore</string>
+    <string name="restore_help">Bring back data from a backup file, for example on a new phone. This replaces everything currently in the app.</string>
+    <string name="restore_choose_file">Choose backup file</string>
+    <string name="restore_passphrase_title">Backup passphrase</string>
+    <string name="restore_passphrase_help">Enter the passphrase you chose when this backup was made.</string>
+    <string name="restore_cannot_open">Couldn\'t open the file. Check the passphrase, and that it\'s a Tuition Manager backup.</string>
+    <string name="restore_not_backup">This file isn\'t a Tuition Manager backup.</string>
+    <string name="restore_too_new">This backup is from a newer version of the app. Update the app, then try again.</string>
+    <string name="restore_failed">Restore failed. Your current data is unchanged.</string>
+    <string name="restore_confirm_title">Replace all data?</string>
+    <string name="restore_confirm_text">The backup has %1$d students and %2$d payments. Everything currently in the app will be replaced.</string>
+    <string name="restore_confirm_action">Replace</string>
+    <string name="restore_done_title">Restore complete</string>
+    <string name="restore_done_text">The app will now restart with your restored data.</string>
+    <string name="field_passphrase">Passphrase</string>
+    <string name="field_passphrase_again">Passphrase again</string>
+    <string name="error_passphrase_short">Use at least 8 characters</string>
+    <string name="error_passphrase_mismatch">The passphrases don\'t match</string>
+    <string name="action_continue">Continue</string>
+    <string name="home_backup_never">You haven\'t backed up yet. If this phone is lost, your data is lost too.</string>
+    <string name="home_backup_old">Last backup was on %1$s. Back up again to keep it current.</string>
+    <string name="home_backup_action">Back up</string>
+
     <plurals name="student_count">
         <item quantity="one">%d student</item>
         <item quantity="other">%d students</item>

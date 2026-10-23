@@ -1,8 +1,5 @@
 package com.softandtech.tuitionmanager.ui.students
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -301,14 +298,8 @@ private fun DetailRow(label: String, value: String, callNumber: String? = null) 
         headlineContent = { Text(value) },
         trailingContent = callNumber?.let {
             {
-                IconButton(onClick = {
-                    // ACTION_DIAL needs no permission; the user still taps Call in their dialer
-                    try {
-                        context.startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:$it")))
-                    } catch (_: ActivityNotFoundException) {
-                        // No dialer (e.g. Wi-Fi-only tablet) — nothing to do
-                    }
-                }) {
+                // Returns false on phones without a dialer (e.g. Wi-Fi-only tablets) — nothing to do then
+                IconButton(onClick = { Sharing.dial(context, it) }) {
                     Icon(Icons.Filled.Call, contentDescription = stringResource(R.string.action_call))
                 }
             }

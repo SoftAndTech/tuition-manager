@@ -6,7 +6,15 @@ import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
+import androidx.compose.ui.graphics.Color
 import androidx.compose.material3.Switch
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.core.content.ContextCompat
@@ -123,7 +131,11 @@ class SettingsViewModel @Inject constructor(
 }
 
 @Composable
-fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
+fun SettingsScreen(
+    onOpenSecurity: () -> Unit,
+    onOpenBackup: () -> Unit,
+    viewModel: SettingsViewModel = hiltViewModel(),
+) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val dailyReminder by viewModel.dailyReminder.collectAsStateWithLifecycle()
     val snackbar = remember { SnackbarHostState() }
@@ -159,7 +171,24 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Text(stringResource(R.string.settings_profile_header), style = MaterialTheme.typography.titleMedium)
+            Card(Modifier.fillMaxWidth()) {
+                ListItem(
+                    colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+                    headlineContent = { Text(stringResource(R.string.security_title)) },
+                    supportingContent = { Text(stringResource(R.string.settings_security_summary)) },
+                    leadingContent = { Icon(Icons.Filled.Lock, contentDescription = null) },
+                    modifier = Modifier.clickable(onClick = onOpenSecurity),
+                )
+                ListItem(
+                    colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+                    headlineContent = { Text(stringResource(R.string.backup_title)) },
+                    supportingContent = { Text(stringResource(R.string.settings_backup_summary)) },
+                    leadingContent = { Icon(Icons.Filled.Refresh, contentDescription = null) },
+                    modifier = Modifier.clickable(onClick = onOpenBackup),
+                )
+            }
+
+            Text(stringResource(R.string.settings_profile_header), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 8.dp))
             Text(
                 stringResource(R.string.settings_profile_help),
                 style = MaterialTheme.typography.bodyMedium,

@@ -31,6 +31,9 @@ import com.softandtech.tuitionmanager.ui.batches.BatchDetailScreen
 import com.softandtech.tuitionmanager.ui.batches.BatchEditScreen
 import com.softandtech.tuitionmanager.ui.batches.BatchesScreen
 import com.softandtech.tuitionmanager.ui.home.HomeScreen
+import com.softandtech.tuitionmanager.ui.lock.PinSetupScreen
+import com.softandtech.tuitionmanager.ui.settings.BackupScreen
+import com.softandtech.tuitionmanager.ui.settings.SecurityScreen
 import com.softandtech.tuitionmanager.ui.settings.SettingsScreen
 import com.softandtech.tuitionmanager.ui.students.StudentDetailScreen
 import com.softandtech.tuitionmanager.ui.students.StudentEditScreen
@@ -50,6 +53,10 @@ const val NEW_ID = 0L
 @Serializable data class StudentEditRoute(val studentId: Long = NEW_ID)
 @Serializable data class BatchDetailRoute(val batchId: Long)
 @Serializable data class BatchEditRoute(val batchId: Long = NEW_ID)
+@Serializable object SecurityRoute
+@Serializable object BackupRoute
+/** [mode] is a [com.softandtech.tuitionmanager.ui.lock.PinSetupMode] name. */
+@Serializable data class PinSetupRoute(val mode: String)
 /** [epochDay] is the register's date (LocalDate.toEpochDay), defaulting to today. */
 @Serializable data class AttendanceRoute(val batchId: Long, val epochDay: Long = LocalDate.now().toEpochDay())
 
@@ -106,6 +113,7 @@ fun AppNavHost() {
                 HomeScreen(
                     onStudentClick = { navController.navigate(StudentDetailRoute(it)) },
                     onTakeAttendance = { navController.navigate(AttendanceRoute(it)) },
+                    onOpenBackup = { navController.navigate(BackupRoute) },
                     onOpenSettings = {
                         navController.navigate(SettingsRoute) {
                             popUpTo(navController.graph.findStartDestination().id) { saveState = true }
@@ -114,7 +122,22 @@ fun AppNavHost() {
                     },
                 )
             }
-            composable<SettingsRoute> { SettingsScreen() }
+            composable<SettingsRoute> {
+                SettingsScreen(
+                    onOpenSecurity = { navController.navigate(SecurityRoute) },
+                    onOpenBackup = { navController.navigate(BackupRoute) },
+                )
+            }
+            composable<SecurityRoute> {
+                SecurityScreen(
+                    onBack = navController::popBackStack,
+                    onPin = { navController.navigate(PinSetupRoute(it.name)) },
+                )
+            }
+            composable<PinSetupRoute> {
+                PinSetupScreen(onDone = { navController.popBackStack() }, onBack = navController::popBackStack)
+            }
+            composable<BackupRoute> { BackupScreen(onBack = navController::popBackStack) }
 
             composable<StudentsRoute> {
                 StudentsScreen(

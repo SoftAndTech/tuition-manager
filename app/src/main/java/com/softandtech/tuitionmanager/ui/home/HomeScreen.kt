@@ -54,6 +54,7 @@ fun HomeScreen(
     onStudentClick: (Long) -> Unit,
     onOpenSettings: () -> Unit,
     onTakeAttendance: (batchId: Long) -> Unit,
+    onOpenBackup: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -88,6 +89,24 @@ fun HomeScreen(
                         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(start = 16.dp, end = 8.dp, top = 8.dp, bottom = 8.dp)) {
                             Text(stringResource(R.string.home_setup_profile), modifier = Modifier.weight(1f))
                             TextButton(onClick = onOpenSettings) { Text(stringResource(R.string.home_setup_action)) }
+                        }
+                    }
+                }
+            }
+
+            if (state.backupDue) {
+                item {
+                    Card(
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer),
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(start = 16.dp, end = 8.dp, top = 8.dp, bottom = 8.dp)) {
+                            Text(
+                                state.lastBackup?.let { stringResource(R.string.home_backup_old, Formatters.date(it)) }
+                                    ?: stringResource(R.string.home_backup_never),
+                                modifier = Modifier.weight(1f),
+                            )
+                            TextButton(onClick = onOpenBackup) { Text(stringResource(R.string.home_backup_action)) }
                         }
                     }
                 }

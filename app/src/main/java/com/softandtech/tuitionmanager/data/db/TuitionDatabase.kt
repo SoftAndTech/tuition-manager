@@ -33,7 +33,7 @@ import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
         AttendanceEntity::class,
         ExpenseEntity::class,
     ],
-    version = 1,
+    version = TuitionDatabase.VERSION,
     exportSchema = true,
 )
 @TypeConverters(Converters::class)
@@ -49,6 +49,9 @@ abstract class TuitionDatabase : RoomDatabase() {
 
     companion object {
         const val NAME = "tuition.db"
+
+        /** Schema version; also stamped into backups so newer backups aren't restored into older apps. */
+        const val VERSION = 1
 
         /** Opens the database encrypted with SQLCipher using [key]. */
         fun build(context: Context, key: ByteArray, name: String = NAME): TuitionDatabase =

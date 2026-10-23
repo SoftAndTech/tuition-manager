@@ -3,7 +3,13 @@
 > Working name: **Tuition Manager** (final Play Store name TBD)
 > Owner: Soft And Tech Solutions
 > Platform: Android (Kotlin + Jetpack Compose)
-> Status: **Phase 0 ✅ · Phase 1 ✅ · Phase 2 ✅ · Phase 3 ✅ · Phase 4 ✅ · next: Phase 5 (Security & backup)**
+> Status: **Phase 0 ✅ · Phase 1 ✅ · Phase 2 ✅ · Phase 3 ✅ · Phase 4 ✅ · Phase 5 ✅ · next: Phase 6 (Monetization & release)**
+>
+> Phase 5 notes: the backup format changed from the draft. Instead of a custom AES-GCM file, a
+> backup is itself a SQLCipher database encrypted with the tutor's passphrase (SQLCipher's
+> PBKDF2 + random salt), filled with `sqlcipher_export`, so no plain-text copy ever touches disk.
+> The PIN is stored as a PBKDF2 hash; 5 wrong tries start a 30 s wait that doubles up to 15 min.
+> A forgotten PIN can't be bypassed — the only way out is "Erase all data" and restore a backup.
 >
 > Phase 3 notes: the Settings screen (institute details, UPI ID, receipt prefix, join-month policy)
 > was pulled forward because receipts and reminders need it. Monthly dues are generated on app open

@@ -94,6 +94,10 @@ dependencies {
   // Settings (institute details, receipt prefix, billing policy)
   implementation(libs.androidx.datastore.preferences)
 
+  // App lock: fingerprint/face unlock (BiometricPrompt needs a FragmentActivity)
+  implementation(libs.androidx.biometric)
+  implementation(libs.androidx.fragment.ktx)
+
   // Daily overdue-fee check
   implementation(libs.androidx.work.runtime.ktx)
 

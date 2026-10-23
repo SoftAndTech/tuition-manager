@@ -10,6 +10,7 @@ import com.softandtech.tuitionmanager.data.repository.BatchRepository
 import com.softandtech.tuitionmanager.data.repository.FeeRepository
 import com.softandtech.tuitionmanager.data.repository.FeeSync
 import com.softandtech.tuitionmanager.data.repository.StudentRepository
+import com.softandtech.tuitionmanager.data.security.SecurityRepository
 import com.softandtech.tuitionmanager.data.settings.SettingsRepository
 import com.softandtech.tuitionmanager.domain.WeekDays
 import com.softandtech.tuitionmanager.ui.receipt.ReminderTextProvider
@@ -43,16 +44,23 @@ data class HomeUiState(
     val todayClasses: List<TodayClass> = emptyList(),
     val activeStudents: Int = 0,
     val hasBatches: Boolean = false,
+    /** There are students and no backup in the last [BACKUP_REMINDER_DAYS] days. */
+    val backupDue: Boolean = false,
+    val lastBackup: LocalDate? = null,
 ) {
     val month: YearMonth get() = YearMonth.from(today)
     val overdueTotalPaise: Long get() = overdue.sumOf { it.outstandingPaise }
 }
+
+/** Losing a phone loses everything not backed up; nudge monthly. */
+const val BACKUP_REMINDER_DAYS = 30L
 
 private data class FeeOverview(
     val billed: Long,
     val collected: Long,
     val overdue: List<StudentOverdue>,
     val hasProfile: Boolean,
+    val lastBackup: LocalDate?,
 )
 
 @HiltViewModel
@@ -63,6 +71,7 @@ class HomeViewModel @Inject constructor(
     private val reminderText: ReminderTextProvider,
     batchRepository: BatchRepository,
     attendanceRepository: AttendanceRepository,
+    securityRepository: SecurityRepository,
     feeSync: FeeSync,
     clock: Clock,
 ) : ViewModel() {
@@ -78,7 +87,10 @@ class HomeViewModel @Inject constructor(
         feeRepository.observeCollected(month),
         feeRepository.observeOverdue(today),
         settingsRepository.settings,
-    ) { billed, collected, overdue, settings -> FeeOverview(billed, collected, overdue, settings.signature.isNotEmpty()) }
+        securityRepository.settings,
+    ) { billed, collected, overdue, settings, security ->
+        FeeOverview(billed, collected, overdue, settings.signature.isNotEmpty(), security.lastBackup)
+    }
 
     val state: StateFlow<HomeUiState> = combine(
         feeOverview,
@@ -97,6 +109,9 @@ class HomeViewModel @Inject constructor(
                 .map { TodayClass(it, marked[it.batch.id] ?: 0) },
             activeStudents = studentCount,
             hasBatches = batches.isNotEmpty(),
+            backupDue = studentCount > 0 &&
+                (fees.lastBackup == null || fees.lastBackup.plusDays(BACKUP_REMINDER_DAYS) <= today),
+            lastBackup = fees.lastBackup,
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), HomeUiState(today = today))
 
