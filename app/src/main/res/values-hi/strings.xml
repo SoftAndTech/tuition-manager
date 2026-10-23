@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Hindi (हिन्दी). Everyday Hindi as tutors speak it: common loanwords (बैच, फ़ीस, PIN, UPI) kept.
+  "Tuition Manager" stays as the brand name. Placeholders (%1$s etc.) must match values/strings.xml.
+-->
+<resources>
+    <string name="app_name">Tuition Manager</string>
+
+    <!-- Navigation -->
+    <string name="nav_dashboard">होम</string>
+    <string name="nav_students">छात्र</string>
+    <string name="nav_batches">बैच</string>
+    <string name="nav_settings">सेटिंग्स</string>
+
+    <!-- Common actions -->
+    <string name="action_back">वापस</string>
+    <string name="action_ok">ठीक है</string>
+    <string name="action_cancel">रद्द करें</string>
+    <string name="action_clear">साफ़ करें</string>
+    <string name="action_save">सेव करें</string>
+    <string name="action_edit">बदलें</string>
+    <string name="action_add">जोड़ें</string>
+    <string name="action_call">कॉल करें</string>
+    <string name="action_discard">छोड़ दें</string>
+    <string name="discard_title">बदलाव छोड़ दें?</string>
+    <string name="discard_text">इस पेज पर लिखी जानकारी सेव नहीं होगी।</string>
+
+    <!-- Validation -->
+    <string name="error_name_required">नाम ज़रूरी है</string>
+    <string name="error_phone_invalid">सही फ़ोन नंबर डालें</string>
+    <string name="error_amount_invalid">सही रकम डालें, जैसे 1000</string>
+    <string name="error_due_day">1 से 31 के बीच कोई तारीख डालें</string>
+    <string name="error_end_before_start">खत्म होने का समय शुरू होने के समय के बाद होना चाहिए</string>
+
+    <!-- Students list -->
+    <string name="student_add">छात्र जोड़ें</string>
+    <string name="students_search_hint">नाम, फ़ोन या कक्षा से खोजें</string>
+    <string name="students_filter_current">मौजूदा</string>
+    <string name="students_filter_left">छोड़ चुके</string>
+    <string name="students_empty">अभी कोई छात्र नहीं है।\nपहला छात्र जोड़ने के लिए “छात्र जोड़ें” दबाएँ।</string>
+    <string name="students_empty_search">“%1$s” से कोई छात्र नहीं मिला</string>
+    <string name="students_empty_left">किसी छात्र ने ट्यूशन नहीं छोड़ा है।</string>
+
+    <!-- Student form -->
+    <string name="student_new_title">नया छात्र</string>
+    <string name="student_edit_title">छात्र की जानकारी बदलें</string>
+    <string name="field_name">छात्र का नाम *</string>
+    <string name="field_class">कक्षा / स्कूल</string>
+    <string name="field_phone">छात्र का फ़ोन</string>
+    <string name="field_parent_name">अभिभावक का नाम</string>
+    <string name="field_parent_phone">अभिभावक का फ़ोन</string>
+    <string name="field_join_date">जुड़ने की तारीख</string>
+    <string name="field_notes">नोट्स</string>
+    <string name="student_batches_header">बैच</string>
+    <string name="student_no_batches">अभी कोई बैच नहीं है। आप इस छात्र को बाद में किसी बैच में जोड़ सकते हैं।</string>
+    <string name="field_custom_fee">अलग फ़ीस (₹), चाहें तो</string>
+    <string name="custom_fee_hint">बैच फ़ीस %1$s</string>
+    <string name="bill_from_header">फ़ीस किस महीने से लें</string>
+    <string name="bill_from_current">%1$s (पिछले महीनों की फ़ीस मिल चुकी है)</string>
+    <string name="bill_from_join">%1$s (जुड़ने का महीना)</string>
+
+    <!-- Student detail -->
+    <string name="student_left_banner">यह छात्र ट्यूशन छोड़ चुका है। फ़ीस और हाज़िरी का रिकॉर्ड सुरक्षित है।</string>
+    <string name="student_add_to_batch">बैच में जोड़ें</string>
+    <string name="student_no_current_batches">किसी बैच में नहीं</string>
+    <string name="enrollment_fee_since">%1$s/महीना · %2$s से</string>
+    <string name="enrollment_left">%1$s को छोड़ा</string>
+    <string name="action_leave_batch">हटाएँ</string>
+    <string name="leave_batch_title">%1$s से हटाएँ?</string>
+    <string name="leave_batch_text">इस महीने के बाद इस बैच की फ़ीस नहीं जुड़ेगी। पुराना रिकॉर्ड सुरक्षित रहेगा।</string>
+    <string name="action_mark_left">छोड़ चुका मार्क करें</string>
+    <string name="action_rejoin">फिर से जोड़ें</string>
+    <string name="mark_left_title">%1$s को छोड़ चुका मार्क करें?</string>
+    <string name="mark_left_text">छात्र सभी बैच से हट जाएगा और नई फ़ीस नहीं जुड़ेगी। पुरानी फ़ीस और भुगतान सुरक्षित रहेंगे।</string>
+
+    <!-- Batches -->
+    <string name="batch_add">बैच जोड़ें</string>
+    <string name="batches_empty">अभी कोई बैच नहीं है।\nआप जो भी ग्रुप पढ़ाते हैं, उसके लिए एक बैच बनाएँ।</string>
+    <string name="batch_new_title">नया बैच</string>
+    <string name="batch_edit_title">बैच बदलें</string>
+    <string name="field_batch_name">बैच का नाम *</string>
+    <string name="batch_name_hint">जैसे कक्षा 10 गणित</string>
+    <string name="field_subject">विषय</string>
+    <string name="field_days">क्लास के दिन</string>
+    <string name="field_start_time">शुरू होने का समय</string>
+    <string name="field_end_time">खत्म होने का समय</string>
+    <string name="field_monthly_fee">मासिक फ़ीस (₹) *</string>
+    <string name="field_due_day">फ़ीस की तारीख</string>
+    <string name="due_day_help">महीने की तारीख, जैसे 5</string>
+    <string name="batch_fee_per_month">%1$s/महीना</string>
+    <string name="batch_due_day">हर महीने की %1$d तारीख को फ़ीस देय</string>
+    <string name="batch_students_header">छात्र</string>
+    <string name="batch_no_students">इस बैच में अभी कोई छात्र नहीं है। छात्र के पेज से उन्हें जोड़ें।</string>
+    <string name="action_archive">बंद करें</string>
+    <string name="archive_title">%1$s बंद करें?</string>
+    <string name="archive_text">इस बैच की नई फ़ीस नहीं जुड़ेगी। छात्र और पुराना रिकॉर्ड सुरक्षित रहेगा।</string>
+
+    <!-- Fees -->
+    <string name="action_done">हो गया</string>
+    <string name="action_delete">मिटाएँ</string>
+    <string name="action_share_receipt">रसीद भेजें</string>
+    <string name="action_waive">माफ़ करें</string>
+    <string name="action_unwaive">माफ़ी वापस लें</string>
+    <string name="error_title_required">लिखें कि यह शुल्क किसलिए है</string>
+    <string name="mode_cash">नकद</string>
+    <string name="mode_upi">UPI</string>
+    <string name="mode_bank">बैंक ट्रांसफ़र</string>
+    <string name="mode_other">अन्य</string>
+    <string name="fees_due_now">अभी बकाया</string>
+    <string name="fees_advance">एडवांस जमा: %1$s</string>
+    <string name="fees_collect">फ़ीस लें</string>
+    <string name="fees_remind">याद दिलाएँ</string>
+    <string name="fees_history">फ़ीस का हिसाब</string>
+    <string name="fees_add_charge">शुल्क जोड़ें</string>
+    <string name="fees_no_dues">अभी कोई फ़ीस नहीं। छात्र के किसी बैच में जुड़ते ही मासिक फ़ीस दिखेगी।</string>
+    <string name="fees_payments">भुगतान</string>
+    <string name="fees_no_payments">अभी कोई भुगतान दर्ज नहीं है।</string>
+    <string name="due_partial_detail">%2$s में से %1$s जमा</string>
+    <string name="due_on">देय %1$s</string>
+    <string name="status_paid">जमा</string>
+    <string name="status_partial">आंशिक</string>
+    <string name="status_due">बकाया</string>
+    <string name="status_waived">माफ़</string>
+    <string name="field_amount">रकम (₹)</string>
+    <string name="field_paid_on">भुगतान की तारीख</string>
+    <string name="field_note_optional">नोट (चाहें तो)</string>
+    <string name="field_charge_title">किसलिए?</string>
+    <string name="charge_title_hint">जैसे दाखिला फ़ीस, किताबें</string>
+    <string name="field_due_date">देय तारीख</string>
+    <string name="due_waive_text">यह फ़ीस माफ़ करें? यह बकाया में नहीं गिनी जाएगी। जो रकम पहले जमा हो चुकी है, वह रिकॉर्ड में रहेगी।</string>
+    <string name="due_unwaive_text">माफ़ी वापस लें? यह फ़ीस फिर से बकाया में गिनी जाएगी।</string>
+    <string name="payment_delete_text">यह भुगतान मिटाएँ? ऐसा तभी करें जब यह गलती से दर्ज हुआ हो। इससे जमा हुई फ़ीस फिर से बकाया दिखेगी।</string>
+    <string name="payment_saved_title">भुगतान सेव हो गया</string>
+    <string name="payment_saved_text">%1$s मिले। रसीद %2$s।</string>
+
+    <!-- Reminders (sent via WhatsApp; the tutor reviews and taps Send) -->
+    <string name="reminder_greeting">नमस्ते,</string>
+    <string name="reminder_greeting_named">आदरणीय %1$s,</string>
+    <string name="reminder_body">आपको याद दिलाना था कि %2$s की %1$s ट्यूशन फ़ीस बाकी है (%3$s)।</string>
+    <string name="reminder_upi">आप इस UPI पर भुगतान कर सकते हैं: %1$s</string>
+    <string name="reminder_thanks">धन्यवाद,</string>
+    <string name="reminder_more">और %1$d</string>
+    <string name="reminder_nothing_due">इस छात्र की अभी कोई फ़ीस देय नहीं है।</string>
+    <string name="reminder_no_phone">रिमाइंडर भेजने के लिए अभिभावक या छात्र का फ़ोन नंबर जोड़ें।</string>
+    <string name="reminder_cannot_open">इस फ़ोन पर WhatsApp या ब्राउज़र नहीं खुल सका।</string>
+
+    <!-- Receipt PDF -->
+    <string name="receipt_title">फ़ीस रसीद</string>
+    <string name="receipt_no">क्रमांक %1$s</string>
+    <string name="receipt_date">तारीख: %1$s</string>
+    <string name="receipt_received_from">प्राप्त किया</string>
+    <string name="receipt_paid_for">किसके लिए</string>
+    <string name="receipt_amount">रकम</string>
+    <string name="receipt_more_items">%1$d और मद</string>
+    <string name="receipt_advance">एडवांस (आगे की फ़ीस के लिए)</string>
+    <string name="receipt_total">कुल प्राप्त</string>
+    <string name="receipt_mode">भुगतान का तरीका: %1$s</string>
+    <string name="receipt_note">नोट: %1$s</string>
+    <string name="receipt_balance">बाकी देय: %1$s</string>
+    <string name="receipt_no_balance">कोई बकाया नहीं। धन्यवाद!</string>
+    <string name="receipt_footer">कंप्यूटर से बनी रसीद · Tuition Manager</string>
+    <string name="receipt_share_title">रसीद भेजें</string>
+    <string name="receipt_share_message">%2$s की फ़ीस रसीद %1$s: %3$s प्राप्त हुए। धन्यवाद!</string>
+
+    <!-- Home -->
+    <string name="home_setup_profile">अपने संस्थान का नाम और UPI ID जोड़ें, ताकि वे रसीद और रिमाइंडर पर दिखें।</string>
+    <string name="home_setup_action">जोड़ें</string>
+    <string name="home_this_month">%1$s में मिली फ़ीस</string>
+    <string name="home_collected_of">इस महीने की कुल फ़ीस %1$s</string>
+    <string name="home_overdue">बकाया फ़ीस</string>
+    <string name="home_no_overdue">कोई फ़ीस बकाया नहीं है।</string>
+    <string name="home_overdue_detail">%1$s · %2$s से बकाया</string>
+    <string name="home_remind_cd">%1$s को WhatsApp पर रिमाइंडर भेजें</string>
+
+    <!-- Settings -->
+    <string name="settings_saved">सेटिंग्स सेव हो गईं</string>
+    <string name="settings_profile_header">आपकी जानकारी</string>
+    <string name="settings_profile_help">रसीद और रिमाइंडर संदेशों में दिखती है।</string>
+    <string name="field_institute">संस्थान / ट्यूशन का नाम</string>
+    <string name="field_tutor_name">आपका नाम</string>
+    <string name="field_tutor_phone">आपका फ़ोन</string>
+    <string name="field_upi">UPI ID</string>
+    <string name="upi_hint">जैसे yourname@okaxis</string>
+    <string name="field_receipt_prefix">रसीद नंबर की शुरुआत</string>
+    <string name="error_upi_invalid">name@bank जैसी UPI ID डालें</string>
+    <string name="settings_join_policy">जब छात्र महीने के बीच में जुड़े</string>
+    <string name="policy_full">पूरे महीने की फ़ीस लें</string>
+    <string name="policy_prorated">सिर्फ़ बचे हुए दिनों की फ़ीस लें</string>
+    <string name="policy_next_month">अगले महीने से फ़ीस लें</string>
+    <string name="settings_privacy_note">आपके छात्रों का डेटा सिर्फ़ इसी फ़ोन में, एन्क्रिप्ट करके रखा जाता है। कुछ भी कहीं अपलोड नहीं होता।</string>
+
+    <!-- Attendance -->
+    <string name="attendance_title">हाज़िरी</string>
+    <string name="attendance_take">हाज़िरी लें</string>
+    <string name="attendance_take_short">हाज़िरी</string>
+    <string name="attendance_date">तारीख</string>
+    <string name="attendance_not_class_day">यह बैच आमतौर पर इस दिन नहीं होता।</string>
+    <string name="attendance_counts">%1$d उपस्थित · %2$d अनुपस्थित · %3$d छुट्टी</string>
+    <string name="attendance_all_present">सभी उपस्थित</string>
+    <string name="attendance_no_students">इस तारीख को इस बैच में कोई छात्र नहीं था।</string>
+    <string name="attendance_save">हाज़िरी सेव करें</string>
+    <string name="attendance_update">हाज़िरी अपडेट करें</string>
+    <string name="attendance_saved">हाज़िरी सेव हो गई</string>
+    <string name="attendance_present">उपस्थित</string>
+    <string name="attendance_absent">अनुपस्थित</string>
+    <string name="attendance_leave">छुट्टी</string>
+    <string name="attendance_short_present">P</string>
+    <string name="attendance_short_absent">A</string>
+    <string name="attendance_short_leave">L</string>
+    <string name="student_attendance_title">%1$s की हाज़िरी</string>
+    <string name="student_attendance_none">इस महीने अभी हाज़िरी नहीं ली गई।</string>
+    <string name="student_attendance_detail">%1$d उपस्थित · %2$d अनुपस्थित · %3$d छुट्टी</string>
+
+    <!-- Dashboard -->
+    <string name="home_stat_students">छात्र</string>
+    <string name="home_stat_overdue">बकाया</string>
+    <string name="home_today_classes">आज की क्लास (%1$s)</string>
+    <string name="home_no_classes_today">आज कोई क्लास नहीं है।</string>
+    <string name="home_no_batches">आज की क्लास यहाँ देखने के लिए एक बैच बनाएँ।</string>
+    <string name="home_marked_count">%2$d में से %1$d की हाज़िरी</string>
+    <string name="home_not_marked">अभी हाज़िरी नहीं ली गई</string>
+    <string name="home_marked_cd">हाज़िरी ले ली गई</string>
+
+    <!-- Daily reminder notification -->
+    <string name="settings_notifications_header">सूचनाएँ</string>
+    <string name="settings_daily_reminder">बकाया फ़ीस की रोज़ की सूचना</string>
+    <string name="settings_daily_reminder_help">फ़ीस बकाया होने पर सुबह 9 बजे सूचना। इसमें सिर्फ़ संख्या और कुल रकम दिखती है, छात्रों के नाम कभी नहीं।</string>
+    <string name="settings_notify_denied">सूचनाएँ बंद हैं। रिमाइंडर पाने के लिए फ़ोन की ऐप सेटिंग्स में इन्हें चालू करें।</string>
+    <string name="notify_channel_name">फ़ीस रिमाइंडर</string>
+    <string name="notify_channel_description">बकाया ट्यूशन फ़ीस का रोज़ का सारांश</string>
+    <string name="notify_overdue_title">फ़ीस बकाया</string>
+    <string name="notify_overdue_public">आपके लिए फ़ीस रिमाइंडर हैं</string>
+    <plurals name="notify_overdue_text">
+        <item quantity="one">%1$d छात्र की फ़ीस बकाया है (%2$s)। रिमाइंडर भेजने के लिए दबाएँ।</item>
+        <item quantity="other">%1$d छात्रों की फ़ीस बकाया है (%2$s)। रिमाइंडर भेजने के लिए दबाएँ।</item>
+    </plurals>
+
+    <!-- App lock -->
+    <string name="pin_digits_entered">%1$d अंक डाले गए</string>
+    <string name="pin_delete">अंक मिटाएँ</string>
+    <string name="pin_ok">हो गया</string>
+    <string name="lock_enter_pin">अपना PIN डालें</string>
+    <string name="lock_wrong_pin">गलत PIN। थोड़ा इंतज़ार करने से पहले %1$d कोशिशें बाकी।</string>
+    <string name="lock_wait">बहुत ज़्यादा गलत कोशिशें। %1$d सेकंड बाद फिर कोशिश करें।</string>
+    <string name="lock_biometric_title">Tuition Manager खोलें</string>
+    <string name="lock_use_pin">PIN इस्तेमाल करें</string>
+    <string name="lock_use_biometric">फ़िंगरप्रिंट इस्तेमाल करें</string>
+    <string name="lock_forgot_pin">PIN भूल गए?</string>
+    <string name="lock_forgot_title">PIN भूल गए?</string>
+    <string name="lock_forgot_text">आपके छात्रों की गोपनीयता के लिए PIN न तो वापस मिल सकता है, न हटाया जा सकता है। आप इस फ़ोन से सारा डेटा मिटाकर फिर से शुरू कर सकते हैं, और अगर बैकअप फ़ाइल है तो उससे डेटा वापस ला सकते हैं।</string>
+    <string name="action_erase_everything">सारा डेटा मिटाएँ</string>
+    <string name="pin_setup_title">PIN सेट करें</string>
+    <string name="pin_change_title">PIN बदलें</string>
+    <string name="pin_remove_title">PIN हटाएँ</string>
+    <string name="pin_setup_help">4 से 6 अंक। ऐप खोलने के लिए इसकी ज़रूरत होगी।</string>
+    <string name="pin_enter_current">अपना मौजूदा PIN डालें</string>
+    <string name="pin_choose_new">नया PIN चुनें</string>
+    <string name="pin_confirm_new">नया PIN फिर से डालें</string>
+    <string name="pin_wrong_current">यह आपका मौजूदा PIN नहीं है</string>
+    <string name="pin_too_many">बहुत ज़्यादा गलत कोशिशें। थोड़ी देर बाद फिर कोशिश करें।</string>
+    <string name="pin_mismatch">दोनों PIN मेल नहीं खाए। नया PIN फिर से चुनें।</string>
+
+    <!-- Security settings -->
+    <string name="security_title">सुरक्षा और ऐप लॉक</string>
+    <string name="settings_security_summary">PIN, फ़िंगरप्रिंट, अपने-आप लॉक</string>
+    <string name="security_lock_header">ऐप लॉक</string>
+    <string name="security_lock_on">ऐप खुलते समय PIN माँगा जाता है।</string>
+    <string name="security_lock_off">आपका खुला फ़ोन जिसके हाथ में हो, वह ऐप खोल सकता है। छात्रों की जानकारी सुरक्षित रखने के लिए PIN लगाएँ।</string>
+    <string name="security_set_pin">PIN सेट करें</string>
+    <string name="security_change_pin">PIN बदलें</string>
+    <string name="security_remove_pin">PIN हटाएँ</string>
+    <string name="security_biometric">फ़िंगरप्रिंट से खोलें</string>
+    <string name="security_biometric_help">PIN डालने के बजाय फ़िंगरप्रिंट या चेहरे से खोलें।</string>
+    <string name="security_biometric_unavailable">इस फ़ोन में फ़िंगरप्रिंट या फ़ेस अनलॉक सेट नहीं है।</string>
+    <string name="security_auto_lock">ऐप से बाहर जाने के बाद फिर लॉक करें</string>
+    <string name="auto_lock_immediately">तुरंत</string>
+    <plurals name="auto_lock_after_minutes">
+        <item quantity="one">%d मिनट बाद</item>
+        <item quantity="other">%d मिनट बाद</item>
+    </plurals>
+    <string name="security_secure_screen">हाल के ऐप्स में ऐप छिपाएँ</string>
+    <string name="security_secure_screen_help">ऐप की झलक छिपाता है और स्क्रीनशॉट रोकता है।</string>
+    <string name="security_erase_header">सारा डेटा मिटाएँ</string>
+    <string name="security_erase_help">इस फ़ोन से हर छात्र, फ़ीस, भुगतान और सेटिंग मिट जाएगी। अगर बाद में ज़रूरत हो तो पहले बैकअप बना लें।</string>
+    <string name="security_erase_confirm_title">सब कुछ मिटाएँ?</string>
+    <string name="security_erase_confirm_text">यह वापस नहीं होगा। इस फ़ोन पर Tuition Manager का सारा डेटा मिट जाएगा और ऐप बंद हो जाएगा।</string>
+
+    <!-- Backup & restore -->
+    <string name="backup_title">बैकअप और रीस्टोर</string>
+    <string name="settings_backup_summary">अपने डेटा की एन्क्रिप्टेड कॉपी सेव करें</string>
+    <string name="backup_explainer">आपका डेटा सिर्फ़ इसी फ़ोन में है। फ़ोन खो जाए या बदल जाए, तो बैकअप ही उसे वापस पाने का अकेला तरीका है।\n\nबैकअप एक फ़ाइल है, जो आपके चुने हुए पासफ़्रेज़ से लॉक होती है। इसे किसी सुरक्षित जगह रखें, जैसे Google Drive या खुद के साथ WhatsApp चैट में। पासफ़्रेज़ के बिना इसे कोई नहीं खोल सकता, हम भी नहीं, इसलिए इसे भूलें नहीं।</string>
+    <string name="backup_last_never">पिछला बैकअप: कभी नहीं</string>
+    <string name="backup_last">पिछला बैकअप: %1$s</string>
+    <string name="backup_create">बैकअप बनाएँ</string>
+    <string name="backup_passphrase_title">बैकअप पासफ़्रेज़ चुनें</string>
+    <string name="backup_passphrase_help">कम से कम 8 अक्षर। इसे लिखकर रखें। इसके बिना बैकअप नहीं खुलेगा।</string>
+    <string name="backup_done">बैकअप सेव हो गया</string>
+    <string name="backup_failed">बैकअप सेव नहीं हो सका। कोई दूसरी जगह चुनें।</string>
+    <string name="restore_header">रीस्टोर</string>
+    <string name="restore_help">बैकअप फ़ाइल से डेटा वापस लाएँ, जैसे नए फ़ोन पर। इससे ऐप का मौजूदा सारा डेटा बदल जाएगा।</string>
+    <string name="restore_choose_file">बैकअप फ़ाइल चुनें</string>
+    <string name="restore_passphrase_title">बैकअप पासफ़्रेज़</string>
+    <string name="restore_passphrase_help">वही पासफ़्रेज़ डालें, जो बैकअप बनाते समय चुना था।</string>
+    <string name="restore_cannot_open">फ़ाइल नहीं खुली। पासफ़्रेज़ जाँचें, और देखें कि यह Tuition Manager का बैकअप है।</string>
+    <string name="restore_not_backup">यह फ़ाइल Tuition Manager का बैकअप नहीं है।</string>
+    <string name="restore_too_new">यह बैकअप ऐप के नए वर्ज़न का है। ऐप अपडेट करके फिर कोशिश करें।</string>
+    <string name="restore_failed">रीस्टोर नहीं हो सका। आपका मौजूदा डेटा जैसा था वैसा है।</string>
+    <string name="restore_confirm_title">सारा डेटा बदल दें?</string>
+    <string name="restore_confirm_text">बैकअप में %1$d छात्र और %2$d भुगतान हैं। ऐप में अभी जो कुछ है, वह बदल जाएगा।</string>
+    <string name="restore_confirm_action">बदलें</string>
+    <string name="restore_done_title">रीस्टोर पूरा हुआ</string>
+    <string name="restore_done_text">ऐप अब आपके रीस्टोर किए गए डेटा के साथ फिर से शुरू होगा।</string>
+    <string name="field_passphrase">पासफ़्रेज़</string>
+    <string name="field_passphrase_again">पासफ़्रेज़ फिर से</string>
+    <string name="error_passphrase_short">कम से कम 8 अक्षर रखें</string>
+    <string name="error_passphrase_mismatch">दोनों पासफ़्रेज़ मेल नहीं खाते</string>
+    <string name="action_continue">आगे बढ़ें</string>
+    <string name="home_backup_never">आपने अभी तक बैकअप नहीं बनाया है। फ़ोन खो गया तो डेटा भी खो जाएगा।</string>
+    <string name="home_backup_old">पिछला बैकअप %1$s को बना था। इसे ताज़ा रखने के लिए फिर से बैकअप लें।</string>
+    <string name="home_backup_action">बैकअप लें</string>
+
+    <!-- Pro -->
+    <string name="pro_title">Tuition Manager Pro</string>
+    <string name="settings_pro_summary">असीमित छात्र और बैच</string>
+    <string name="pro_pitch">कुछ बैच से ज़्यादा पढ़ाते हैं? Pro सभी सीमाएँ हमेशा के लिए हटा देता है।</string>
+    <string name="pro_owned">आपके पास Pro है। Tuition Manager का साथ देने के लिए धन्यवाद!</string>
+    <string name="pro_benefit_students">असीमित छात्र</string>
+    <string name="pro_benefit_batches">असीमित बैच</string>
+    <string name="pro_benefit_once">एक बार भुगतान। कोई सब्सक्रिप्शन नहीं, कोई विज्ञापन नहीं।</string>
+    <string name="pro_benefit_support">एक छोटे भारतीय डेवलपर का साथ</string>
+    <string name="pro_free_includes">मुफ़्त वर्ज़न में बाकी सब कुछ है, %1$d छात्रों और %2$d बैच तक।</string>
+    <string name="pro_buy">%1$s में Pro लें</string>
+    <string name="pro_buy_loading">कीमत लोड हो रही है…</string>
+    <string name="pro_restore">खरीदारी वापस लाएँ</string>
+    <string name="pro_play_unavailable">इस फ़ोन पर Google Play उपलब्ध नहीं है, इसलिए यहाँ Pro नहीं खरीदा जा सकता।</string>
+    <string name="upgrade_title">मुफ़्त सीमा पूरी हो गई</string>
+    <string name="upgrade_students">मुफ़्त वर्ज़न में %1$d छात्रों तक की सुविधा है। असीमित छात्रों के लिए Pro लें।</string>
+    <string name="upgrade_batches">मुफ़्त वर्ज़न में %1$d बैच तक की सुविधा है। असीमित बैच के लिए Pro लें।</string>
+    <string name="upgrade_action">Pro देखें</string>
+    <string name="action_not_now">अभी नहीं</string>
+    <string name="settings_language">भाषा</string>
+    <string name="settings_language_summary">English या हिन्दी</string>
+
+    <plurals name="student_count">
+        <item quantity="one">%d छात्र</item>
+        <item quantity="other">%d छात्र</item>
+    </plurals>
+</resources>

@@ -18,7 +18,10 @@ import com.softandtech.tuitionmanager.data.repository.FeeSync
 import com.softandtech.tuitionmanager.data.repository.StudentRepository
 import com.softandtech.tuitionmanager.data.settings.AppSettings
 import com.softandtech.tuitionmanager.data.settings.SettingsRepository
+import com.softandtech.tuitionmanager.data.billing.ProRepository
 import com.softandtech.tuitionmanager.domain.AttendanceSummary
+import com.softandtech.tuitionmanager.domain.Plan
+import kotlinx.coroutines.flow.first
 import com.softandtech.tuitionmanager.domain.Money
 import com.softandtech.tuitionmanager.domain.model.PaymentMode
 import com.softandtech.tuitionmanager.ui.navigation.StudentDetailRoute
@@ -64,6 +67,7 @@ sealed interface StudentDetailEvent {
     data class ShareReceipt(val file: File, val message: String) : StudentDetailEvent
     data class OpenReminder(val waNumber: String, val message: String) : StudentDetailEvent
     data class Message(@StringRes val text: Int) : StudentDetailEvent
+    data object UpgradeNeeded : StudentDetailEvent
 }
 
 @HiltViewModel
@@ -77,6 +81,7 @@ class StudentDetailViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository,
     private val receiptPdfWriter: ReceiptPdfWriter,
     private val reminderText: ReminderTextProvider,
+    private val proRepository: ProRepository,
     private val clock: Clock,
 ) : ViewModel() {
 
@@ -143,8 +148,15 @@ class StudentDetailViewModel @Inject constructor(
         viewModelScope.launch { studentRepository.deactivate(studentId, today) }
     }
 
+    /** Rejoining adds an active student, so the free-plan limit applies as it does to adding one. */
     fun rejoin() {
-        viewModelScope.launch { studentRepository.reactivate(studentId) }
+        viewModelScope.launch {
+            if (Plan.canAdd(studentRepository.activeCount(), Plan.FREE_STUDENT_LIMIT, proRepository.isPro.first())) {
+                studentRepository.reactivate(studentId)
+            } else {
+                _events.send(StudentDetailEvent.UpgradeNeeded)
+            }
+        }
     }
 
     /** Validates synchronously and returns an error, or saves and returns null. */

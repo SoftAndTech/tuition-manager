@@ -16,3 +16,6 @@ captures/
 *.keystore
 keystore.properties
 google-services.json
+
+# Release signing keys
+/keys/

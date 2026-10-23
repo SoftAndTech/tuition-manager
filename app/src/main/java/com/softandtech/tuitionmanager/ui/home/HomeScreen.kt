@@ -46,8 +46,6 @@ import com.softandtech.tuitionmanager.ui.common.TitleTopBar
 import com.softandtech.tuitionmanager.ui.receipt.Sharing
 import com.softandtech.tuitionmanager.ui.students.InitialAvatar
 import com.softandtech.tuitionmanager.ui.students.StudentDetailEvent
-import java.time.format.TextStyle
-import java.util.Locale
 
 @Composable
 fun HomeScreen(
@@ -155,7 +153,7 @@ private fun StatCard(@StringRes label: Int, value: String, modifier: Modifier, h
 
 private fun LazyListScope.todaySection(state: HomeUiState, onTakeAttendance: (Long) -> Unit) {
     item {
-        val day = state.today.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.ENGLISH)
+        val day = Formatters.dayName(state.today.dayOfWeek)
         SectionTitle(stringResource(R.string.home_today_classes, day))
     }
     if (state.todayClasses.isEmpty()) {

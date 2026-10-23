@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
   alias(libs.plugins.android.application)
   alias(libs.plugins.compose.compiler)
@@ -14,12 +16,29 @@ android {
         minSdk = 24
         targetSdk = 36
         versionCode = 1
-        versionName = "0.1.0"
+        versionName = "1.0.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    // Upload-key details live in keystore.properties (git-ignored, never committed):
+    //   storeFile=../keys/upload.jks  storePassword=…  keyAlias=upload  keyPassword=…
+    // Without it, release builds are produced unsigned (fine for CI and local R8 checks).
+    val keystoreFile = rootProject.file("keystore.properties")
+    if (keystoreFile.exists()) {
+        val props = Properties().apply { keystoreFile.inputStream().use { load(it) } }
+        signingConfigs {
+            create("release") {
+                storeFile = rootProject.file(props.getProperty("storeFile"))
+                storePassword = props.getProperty("storePassword")
+                keyAlias = props.getProperty("keyAlias")
+                keyPassword = props.getProperty("keyPassword")
+            }
+        }
     }
 
     buildTypes {
         release {
+            signingConfig = signingConfigs.findByName("release")
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
@@ -97,6 +116,9 @@ dependencies {
   // App lock: fingerprint/face unlock (BiometricPrompt needs a FragmentActivity)
   implementation(libs.androidx.biometric)
   implementation(libs.androidx.fragment.ktx)
+
+  // Pro unlock (one-time purchase through Google Play)
+  implementation(libs.billing)
 
   // Daily overdue-fee check
   implementation(libs.androidx.work.runtime.ktx)

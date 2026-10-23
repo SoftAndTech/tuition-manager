@@ -13,13 +13,20 @@ import java.util.Locale
 
 /** Display formats used across screens. Kept pure so they are unit-testable. */
 object Formatters {
-    private val dateFormat = DateTimeFormatter.ofPattern("d MMM yyyy", Locale.ENGLISH)
-    private val monthFormat = DateTimeFormatter.ofPattern("MMM yyyy", Locale.ENGLISH)
+    // Times stay "5:30 PM" in every language — that's how they're written on Indian timetables
     private val timeFormat = DateTimeFormatter.ofPattern("h:mm a", Locale.ENGLISH)
 
-    fun date(date: LocalDate): String = date.format(dateFormat)
+    /**
+     * Month and day names follow the app's language: Hindi when the app runs in Hindi, otherwise
+     * plain English. (The phone's en-IN locale would print "Sept", so English is pinned.)
+     */
+    fun locale(): Locale = if (Locale.getDefault().language == "hi") Locale.forLanguageTag("hi-IN") else Locale.ENGLISH
 
-    fun month(month: YearMonth): String = month.format(monthFormat)
+    fun date(date: LocalDate): String = date.format(DateTimeFormatter.ofPattern("d MMM yyyy", locale()))
+
+    fun month(month: YearMonth): String = month.format(DateTimeFormatter.ofPattern("MMM yyyy", locale()))
+
+    fun dayName(day: DayOfWeek): String = day.getDisplayName(TextStyle.FULL, locale())
 
     /** Minutes after midnight → "5:30 PM". */
     fun time(minutes: Int): String = LocalTime.of(minutes / 60, minutes % 60).format(timeFormat)
@@ -36,12 +43,12 @@ object Formatters {
         val days = WeekDays.fromMask(mask)
         return when (days.size) {
             0 -> null
-            7 -> "Daily"
+            7 -> if (locale().language == "hi") "रोज़" else "Daily"
             else -> days.joinToString(", ") { shortDay(it) }
         }
     }
 
-    fun shortDay(day: DayOfWeek): String = day.getDisplayName(TextStyle.SHORT, Locale.ENGLISH)
+    fun shortDay(day: DayOfWeek): String = day.getDisplayName(TextStyle.SHORT, locale())
 
     /** Material date pickers work in UTC milliseconds. */
     fun toPickerMillis(date: LocalDate): Long = date.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()

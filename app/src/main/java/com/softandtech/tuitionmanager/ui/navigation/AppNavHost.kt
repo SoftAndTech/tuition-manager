@@ -32,6 +32,7 @@ import com.softandtech.tuitionmanager.ui.batches.BatchEditScreen
 import com.softandtech.tuitionmanager.ui.batches.BatchesScreen
 import com.softandtech.tuitionmanager.ui.home.HomeScreen
 import com.softandtech.tuitionmanager.ui.lock.PinSetupScreen
+import com.softandtech.tuitionmanager.ui.pro.ProScreen
 import com.softandtech.tuitionmanager.ui.settings.BackupScreen
 import com.softandtech.tuitionmanager.ui.settings.SecurityScreen
 import com.softandtech.tuitionmanager.ui.settings.SettingsScreen
@@ -55,6 +56,7 @@ const val NEW_ID = 0L
 @Serializable data class BatchEditRoute(val batchId: Long = NEW_ID)
 @Serializable object SecurityRoute
 @Serializable object BackupRoute
+@Serializable object ProRoute
 /** [mode] is a [com.softandtech.tuitionmanager.ui.lock.PinSetupMode] name. */
 @Serializable data class PinSetupRoute(val mode: String)
 /** [epochDay] is the register's date (LocalDate.toEpochDay), defaulting to today. */
@@ -126,6 +128,7 @@ fun AppNavHost() {
                 SettingsScreen(
                     onOpenSecurity = { navController.navigate(SecurityRoute) },
                     onOpenBackup = { navController.navigate(BackupRoute) },
+                    onOpenPro = { navController.navigate(ProRoute) },
                 )
             }
             composable<SecurityRoute> {
@@ -138,17 +141,20 @@ fun AppNavHost() {
                 PinSetupScreen(onDone = { navController.popBackStack() }, onBack = navController::popBackStack)
             }
             composable<BackupRoute> { BackupScreen(onBack = navController::popBackStack) }
+            composable<ProRoute> { ProScreen(onBack = navController::popBackStack) }
 
             composable<StudentsRoute> {
                 StudentsScreen(
                     onStudentClick = { navController.navigate(StudentDetailRoute(it)) },
                     onAddStudent = { navController.navigate(StudentEditRoute()) },
+                    onUpgrade = { navController.navigate(ProRoute) },
                 )
             }
             composable<StudentDetailRoute> {
                 StudentDetailScreen(
                     onBack = navController::popBackStack,
                     onEdit = { navController.navigate(StudentEditRoute(it)) },
+                    onUpgrade = { navController.navigate(ProRoute) },
                 )
             }
             composable<StudentEditRoute> {
@@ -171,6 +177,7 @@ fun AppNavHost() {
                 BatchesScreen(
                     onBatchClick = { navController.navigate(BatchDetailRoute(it)) },
                     onAddBatch = { navController.navigate(BatchEditRoute()) },
+                    onUpgrade = { navController.navigate(ProRoute) },
                 )
             }
             composable<BatchDetailRoute> {

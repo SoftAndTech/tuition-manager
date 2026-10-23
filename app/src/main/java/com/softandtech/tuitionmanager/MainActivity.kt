@@ -16,6 +16,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.softandtech.tuitionmanager.data.billing.ProRepository
 import com.softandtech.tuitionmanager.data.repository.FeeSync
 import com.softandtech.tuitionmanager.data.security.SecurityRepository
 import com.softandtech.tuitionmanager.data.settings.SettingsRepository
@@ -39,6 +40,7 @@ class MainActivity : FragmentActivity() {
     @Inject lateinit var securityRepository: SecurityRepository
     @Inject lateinit var reminderScheduler: ReminderScheduler
     @Inject lateinit var lockManager: AppLockManager
+    @Inject lateinit var proRepository: ProRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,6 +80,8 @@ class MainActivity : FragmentActivity() {
         super.onStart()
         lifecycleScope.launch {
             lockManager.onAppForeground()
+            // Re-check Pro with Google Play (cached, so this never blocks the app offline)
+            proRepository.start()
             // Each time the app comes to the foreground — a new month may have started since last time
             feeSync.run()
             // Re-applying is harmless (KEEP) and restores the schedule if the system ever dropped it

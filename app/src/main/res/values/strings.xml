@@ -314,6 +314,28 @@
     <string name="home_backup_old">Last backup was on %1$s. Back up again to keep it current.</string>
     <string name="home_backup_action">Back up</string>
 
+    <!-- Pro -->
+    <string name="pro_title">Tuition Manager Pro</string>
+    <string name="settings_pro_summary">Unlimited students and batches</string>
+    <string name="pro_pitch">Growing beyond a few batches? Pro removes the limits, once and for all.</string>
+    <string name="pro_owned">You have Pro. Thank you for supporting Tuition Manager!</string>
+    <string name="pro_benefit_students">Unlimited students</string>
+    <string name="pro_benefit_batches">Unlimited batches</string>
+    <string name="pro_benefit_once">Pay once. No subscription, no ads.</string>
+    <string name="pro_benefit_support">Supports a small Indian developer</string>
+    <string name="pro_free_includes">The free version includes everything else, for up to %1$d students and %2$d batches.</string>
+    <string name="pro_buy">Get Pro for %1$s</string>
+    <string name="pro_buy_loading">Loading price…</string>
+    <string name="pro_restore">Restore purchase</string>
+    <string name="pro_play_unavailable">Google Play isn\'t available on this phone, so Pro can\'t be bought here.</string>
+    <string name="upgrade_title">Free limit reached</string>
+    <string name="upgrade_students">The free version allows up to %1$d students. Get Pro for unlimited students.</string>
+    <string name="upgrade_batches">The free version allows up to %1$d batches. Get Pro for unlimited batches.</string>
+    <string name="upgrade_action">See Pro</string>
+    <string name="action_not_now">Not now</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_language_summary">English or हिन्दी</string>
+
     <plurals name="student_count">
         <item quantity="one">%d student</item>
         <item quantity="other">%d students</item>

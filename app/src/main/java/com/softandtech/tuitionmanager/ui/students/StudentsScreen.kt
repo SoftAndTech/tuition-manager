@@ -30,6 +30,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import com.softandtech.tuitionmanager.domain.Plan
+import com.softandtech.tuitionmanager.ui.pro.UpgradeDialog
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -45,15 +50,22 @@ import com.softandtech.tuitionmanager.ui.common.TitleTopBar
 fun StudentsScreen(
     onStudentClick: (Long) -> Unit,
     onAddStudent: () -> Unit,
+    onUpgrade: () -> Unit,
     viewModel: StudentsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val atFreeLimit by viewModel.atFreeLimit.collectAsStateWithLifecycle()
+    var showUpgrade by remember { mutableStateOf(false) }
+
+    if (showUpgrade) {
+        UpgradeDialog(R.string.upgrade_students, Plan.FREE_STUDENT_LIMIT, onUpgrade, onDismiss = { showUpgrade = false })
+    }
 
     Scaffold(
         topBar = { TitleTopBar(stringResource(R.string.nav_students)) },
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                onClick = onAddStudent,
+                onClick = { if (atFreeLimit) showUpgrade = true else onAddStudent() },
                 icon = { Icon(Icons.Filled.Add, contentDescription = null) },
                 text = { Text(stringResource(R.string.student_add)) },
             )

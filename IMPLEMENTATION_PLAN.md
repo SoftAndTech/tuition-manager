@@ -3,7 +3,14 @@
 > Working name: **Tuition Manager** (final Play Store name TBD)
 > Owner: Soft And Tech Solutions
 > Platform: Android (Kotlin + Jetpack Compose)
-> Status: **Phase 0 ✅ · Phase 1 ✅ · Phase 2 ✅ · Phase 3 ✅ · Phase 4 ✅ · Phase 5 ✅ · next: Phase 6 (Monetization & release)**
+> Status: **Phases 0–6 ✅ · next: Play Console setup and closed testing (see `store/release-checklist.md`)**
+>
+> Phase 6 notes: Pro is a **one-time** in-app product (`pro_unlock`, suggested ₹399) — chosen over a
+> subscription because tutors dislike forced subscriptions. Free: 15 students, 2 batches. Play
+> Billing pulls in Google's telemetry library, which adds INTERNET; the manifest removes it, so the
+> app still has no internet access. Purchases are checked on-device only (no server). The app is in
+> English and Hindi (per-app language on Android 13+). Store texts, graphics, data-safety answers and
+> the privacy policy are in `store/` and `docs/`.
 >
 > Phase 5 notes: the backup format changed from the draft. Instead of a custom AES-GCM file, a
 > backup is itself a SQLCipher database encrypted with the tutor's passphrase (SQLCipher's

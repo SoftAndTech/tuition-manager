@@ -12,6 +12,7 @@ import com.softandtech.tuitionmanager.data.repository.FeeRepository
 import com.softandtech.tuitionmanager.data.repository.StudentRepository
 import com.softandtech.tuitionmanager.data.settings.AppSettings
 import com.softandtech.tuitionmanager.domain.model.PaymentMode
+import com.softandtech.tuitionmanager.ui.common.Formatters
 import java.time.LocalDate
 import java.time.YearMonth
 import kotlinx.coroutines.test.runTest
@@ -83,9 +84,11 @@ class ReceiptAndReminderTest {
         val unpaid = fees.unpaidDues(studentId, oct21)
         val message = Reminders.feeReminder(context, "Asha Sharma", "Mrs Sharma", unpaid, settings)
 
-        assertTrue(message, message.startsWith("Dear Mrs Sharma,"))
-        assertTrue(message, message.contains("₹2,000 for Asha Sharma"))
-        assertTrue(message, message.contains("Sep 2026, Oct 2026"))
+        // Checked in a language-neutral way: the device may run the app in English or Hindi
+        assertTrue(message, message.lines().first().contains("Mrs Sharma"))
+        assertTrue(message, message.contains("₹2,000"))
+        assertTrue(message, message.contains("Asha Sharma"))
+        assertTrue(message, message.contains(Formatters.month(YearMonth.of(2026, 9)) + ", " + Formatters.month(YearMonth.of(2026, 10))))
         assertTrue(message, message.contains("bright@okaxis"))
         assertTrue(message, message.trimEnd().endsWith("Bright Tuition"))
     }

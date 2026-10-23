@@ -71,6 +71,21 @@ class MoneyAndPhoneTest {
     }
 
     @Test
+    fun datesFollowAppLanguage() {
+        val original = java.util.Locale.getDefault()
+        try {
+            java.util.Locale.setDefault(java.util.Locale.forLanguageTag("en-IN"))
+            assertEquals("5 Sep 2026", Formatters.date(LocalDate.of(2026, 9, 5))) // not "Sept"
+            java.util.Locale.setDefault(java.util.Locale.forLanguageTag("hi-IN"))
+            val hindi = Formatters.date(LocalDate.of(2026, 9, 5))
+            assertTrue(hindi, hindi.any { it in 'ऀ'..'ॿ' }) // Devanagari month name
+            assertEquals("रोज़", Formatters.days(0b1111111))
+        } finally {
+            java.util.Locale.setDefault(original)
+        }
+    }
+
+    @Test
     fun formatters() {
         assertEquals("21 Oct 2026", Formatters.date(LocalDate.of(2026, 10, 21)))
         assertEquals("Oct 2026", Formatters.month(YearMonth.of(2026, 10)))

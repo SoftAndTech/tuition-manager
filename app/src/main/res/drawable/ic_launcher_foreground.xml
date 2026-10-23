@@ -1,14 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Placeholder brand mark: open book. Replace once final branding is chosen. -->
+<!--
+  Brand mark: an open book (teaching) with a rupee coin (fees). Drawn inside the adaptive-icon
+  safe zone (the central 66dp of 108dp) so no launcher mask clips it.
+-->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
+    <!-- Book pages -->
     <path
         android:fillColor="#FFFFFF"
-        android:pathData="M54,40 C48,36 40,35 33,36 L33,70 C40,69 48,70 54,74 Z" />
+        android:pathData="M53,37C47,33 39,32 30,33L30,67C39,66 47,67 53,71Z" />
     <path
         android:fillColor="#E8EAF6"
-        android:pathData="M54,40 C60,36 68,35 75,36 L75,70 C68,69 60,70 54,74 Z" />
+        android:pathData="M55,37C61,33 69,32 78,33L78,52C70,53 63,58 61,66L61,68C59,68.8 57,69.8 55,71Z" />
+    <!-- Text lines on the left page -->
+    <path
+        android:strokeColor="#9FA8DA"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M36,43C40,42.6 44,43 48,44.2M36,50C40,49.6 44,50 48,51.2M36,57C40,56.6 44,57 48,58.2" />
+    <!-- Rupee coin -->
+    <path
+        android:fillColor="#FFC107"
+        android:strokeColor="#283593"
+        android:strokeWidth="2"
+        android:pathData="M74,68m-12.5,0a12.5,12.5 0,1 1,25 0a12.5,12.5 0,1 1,-25 0" />
+    <path
+        android:strokeColor="#283593"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M68.5,61.5L79.5,61.5M68.5,65.5L79.5,65.5M71,61.5C77,61.5 77,69 71,69L70,69L77.5,76" />
 </vector>

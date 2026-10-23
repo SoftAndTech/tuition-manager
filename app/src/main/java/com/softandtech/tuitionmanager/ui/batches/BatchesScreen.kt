@@ -15,6 +15,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import com.softandtech.tuitionmanager.data.billing.ProRepository
+import com.softandtech.tuitionmanager.domain.Plan
+import com.softandtech.tuitionmanager.ui.pro.UpgradeDialog
+import kotlinx.coroutines.flow.combine
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -38,25 +45,37 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 
 @HiltViewModel
-class BatchesViewModel @Inject constructor(batchRepository: BatchRepository) : ViewModel() {
+class BatchesViewModel @Inject constructor(batchRepository: BatchRepository, proRepository: ProRepository) : ViewModel() {
     /** Null while loading. */
     val batches: StateFlow<List<BatchWithCount>?> = batchRepository.observeActiveWithCount()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+
+    /** On the free plan with the batch limit reached — adding asks to upgrade instead. */
+    val atFreeLimit: StateFlow<Boolean> = combine(proRepository.isPro, batchRepository.observeActiveWithCount()) { pro, list ->
+        !Plan.canAdd(list.size, Plan.FREE_BATCH_LIMIT, pro)
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
 }
 
 @Composable
 fun BatchesScreen(
     onBatchClick: (Long) -> Unit,
     onAddBatch: () -> Unit,
+    onUpgrade: () -> Unit,
     viewModel: BatchesViewModel = hiltViewModel(),
 ) {
     val batches by viewModel.batches.collectAsStateWithLifecycle()
+    val atFreeLimit by viewModel.atFreeLimit.collectAsStateWithLifecycle()
+    var showUpgrade by remember { mutableStateOf(false) }
+
+    if (showUpgrade) {
+        UpgradeDialog(R.string.upgrade_batches, Plan.FREE_BATCH_LIMIT, onUpgrade, onDismiss = { showUpgrade = false })
+    }
 
     Scaffold(
         topBar = { TitleTopBar(stringResource(R.string.nav_batches)) },
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                onClick = onAddBatch,
+                onClick = { if (atFreeLimit) showUpgrade = true else onAddBatch() },
                 icon = { Icon(Icons.Filled.Add, contentDescription = null) },
                 text = { Text(stringResource(R.string.batch_add)) },
             )

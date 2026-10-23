@@ -61,6 +61,8 @@ import com.softandtech.tuitionmanager.ui.fees.feesSection
 import com.softandtech.tuitionmanager.ui.receipt.Sharing
 import com.softandtech.tuitionmanager.domain.AttendanceSummary
 import com.softandtech.tuitionmanager.domain.Money
+import com.softandtech.tuitionmanager.domain.Plan
+import com.softandtech.tuitionmanager.ui.pro.UpgradeDialog
 import com.softandtech.tuitionmanager.ui.common.BackTopBar
 import com.softandtech.tuitionmanager.ui.common.ConfirmDialog
 import com.softandtech.tuitionmanager.ui.common.DateField
@@ -73,6 +75,7 @@ import java.time.YearMonth
 fun StudentDetailScreen(
     onBack: () -> Unit,
     onEdit: (Long) -> Unit,
+    onUpgrade: () -> Unit,
     viewModel: StudentDetailViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -89,6 +92,11 @@ fun StudentDetailScreen(
     var selectedDue by remember { mutableStateOf<FeeDueWithPaid?>(null) }
     var selectedPayment by remember { mutableStateOf<PaymentEntity?>(null) }
     var savedPayment by remember { mutableStateOf<PaymentEntity?>(null) }
+    var showUpgrade by remember { mutableStateOf(false) }
+
+    if (showUpgrade) {
+        UpgradeDialog(R.string.upgrade_students, Plan.FREE_STUDENT_LIMIT, onUpgrade, onDismiss = { showUpgrade = false })
+    }
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
@@ -100,6 +108,7 @@ fun StudentDetailScreen(
                         snackbar.showSnackbar(context.getString(R.string.reminder_cannot_open))
                     }
                 is StudentDetailEvent.Message -> snackbar.showSnackbar(context.getString(event.text))
+                StudentDetailEvent.UpgradeNeeded -> showUpgrade = true
             }
         }
     }

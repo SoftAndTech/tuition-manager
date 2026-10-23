@@ -1,7 +1,12 @@
 package com.softandtech.tuitionmanager.ui.settings
 
 import android.Manifest
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
+import com.softandtech.tuitionmanager.ui.receipt.Sharing
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -9,8 +14,10 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
@@ -134,6 +141,7 @@ class SettingsViewModel @Inject constructor(
 fun SettingsScreen(
     onOpenSecurity: () -> Unit,
     onOpenBackup: () -> Unit,
+    onOpenPro: () -> Unit,
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -185,6 +193,20 @@ fun SettingsScreen(
                     supportingContent = { Text(stringResource(R.string.settings_backup_summary)) },
                     leadingContent = { Icon(Icons.Filled.Refresh, contentDescription = null) },
                     modifier = Modifier.clickable(onClick = onOpenBackup),
+                )
+                ListItem(
+                    colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+                    headlineContent = { Text(stringResource(R.string.pro_title)) },
+                    supportingContent = { Text(stringResource(R.string.settings_pro_summary)) },
+                    leadingContent = { Icon(Icons.Filled.Star, contentDescription = null) },
+                    modifier = Modifier.clickable(onClick = onOpenPro),
+                )
+                ListItem(
+                    colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+                    headlineContent = { Text(stringResource(R.string.settings_language)) },
+                    supportingContent = { Text(stringResource(R.string.settings_language_summary)) },
+                    leadingContent = { Icon(Icons.Filled.Info, contentDescription = null) },
+                    modifier = Modifier.clickable { openLanguageSettings(context) },
                 )
             }
 
@@ -257,6 +279,24 @@ fun SettingsScreen(
                 Text(stringResource(R.string.settings_privacy_note), modifier = Modifier.padding(16.dp), style = MaterialTheme.typography.bodyMedium)
             }
         }
+    }
+}
+
+/**
+ * Android 13+ has a per-app language setting (English / हिन्दी for this app, listed in
+ * locales_config.xml). Older phones follow the phone's own language, so open that instead.
+ */
+fun openLanguageSettings(context: Context) {
+    val intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        Intent(android.provider.Settings.ACTION_APP_LOCALE_SETTINGS, Uri.fromParts("package", context.packageName, null))
+    } else {
+        Intent(android.provider.Settings.ACTION_LOCALE_SETTINGS)
+    }
+    try {
+        Sharing.beforeLeavingApp?.invoke()
+        context.startActivity(intent)
+    } catch (_: ActivityNotFoundException) {
+        // Some phones hide this screen; the system language still applies
     }
 }
 
